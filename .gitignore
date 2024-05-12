@@ -1,10 +1,26 @@
+## Ignore STM32 CubeIDE temporary files and build results
+# 
+
+#Build Directories
+[Dd]ebug/
+[Rr]elease/
+
+#Build Results
+*.o
+*.eep
+*.elf
+*.hex
+*.map
+*.mk
+*.su
+*.bin
+
 # Prerequisites
 *.d
 
 # Compiled Object files
 *.slo
 *.lo
-*.o
 *.obj
 
 # Precompiled Headers
@@ -30,3 +46,12 @@
 *.exe
 *.out
 *.app
+/Debug/
+
+#Block Metadata
+*.metadata
+
+#User Specific Files
+*.launch
+/.settings
+/Core/Inc/revision.h
