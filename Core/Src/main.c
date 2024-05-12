@@ -25,6 +25,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "app.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -63,16 +65,14 @@ void SystemClock_Config(void);
   * @brief  The application entry point.
   * @retval int
   */
-
 int main( void )
 {
+	// Initialization of Cube MX
 
-	while ( 1 )
-	{
 
-	}
 
-	return 0;
+	// Run application --- Will not return normally
+	return application_main( );
 }
 
 /**
