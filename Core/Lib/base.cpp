@@ -28,7 +28,7 @@ unsigned bIO::read( void )
  */
 void bIO::write( unsigned data )
 {
-    __UNUSED( data ); // Unused parameter
+
 }
 
 /**
@@ -38,8 +38,7 @@ void bIO::write( unsigned data )
  */
 void bIO::stream( volatile void* buffer, int length )
 {
-    __UNUSED( buffer ); // Unused parameter
-    __UNUSED( length ); // Unused parameter
+
 }
 
 /**
@@ -55,7 +54,7 @@ void bIO::init( void )
  * @brief Reset the peripheral.
  * This function will be overwritten by subclass.
  */
-void bIO_reset( void )
+void bIO::reset( void )
 {
     // Do nothing
 }
@@ -73,7 +72,7 @@ void bIO::disable( void )
  * @brief Get the status of the peripheral.
  * @return The status of the peripheral.
  */
-HAL_StatusTypeDef bIO::get_status( void )
+int bIO::get_status( void )
 {
     return this->status; // Return the status
 }

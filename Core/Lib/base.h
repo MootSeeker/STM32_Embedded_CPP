@@ -18,6 +18,23 @@ extern "C" {
 }
 #endif
 
+/*
+ * These addresses are provided by ST's device headers already,
+ * but their 'typedef' syntax can be tough to use with class vars.
+ * So while these macros are a bit ungainly, we can hide them
+ * away in a header file and pretend they don't exist as usual.
+ *
+ * This is very incomplete; I only add values as I use them.
+ */
+#define __REG(x) (__IO uint32_t*)((x))
+
+// Global macro definitions.
+#define pSTATUS_ERR (0)
+#define pSTATUS_SET (1)
+#define pSTATUS_ON  (2)
+#define pSTATUS_RUN (3)
+
+
 /**
  * @brief Class declaration for basic input/output structures.
  *
@@ -74,10 +91,16 @@ class bIO
          * @brief Get the status of the peripheral.
          * @return The status of the peripheral.
          */
-        virtual HAL_StatusTypeDef get_status( void );
+        virtual int get_status( void );
 
     protected:
-        HAL_StatusTypeDef status = HAL_ERROR; /**< Status of the peripheral. */
+        int status = pSTATUS_ERR;
+
+        // Enable/disable/reset register definitions.
+        __IO uint32_t *enable_reg = 0;
+        __IO uint32_t *reset_reg  = 0;
+        uint32_t       enable_bit = 0;
+        uint32_t       reset_bit  = 0;
 
     private:
 };
