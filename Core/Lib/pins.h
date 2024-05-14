@@ -10,19 +10,50 @@
 
 #include "core.h"
 
+
+enum class PinMode {
+    INPUT,
+    OUTPUT,
+    ANALOG,
+    // Fügen Sie hier weitere Modi hinzu
+};
+
 class Pin {
 public:
-    volatile uint32_t* port;
+    GPIO_TypeDef* gpio;
     uint8_t pin;
+    PinMode mode;
 
-    Pin(volatile uint32_t* port, uint8_t pin) : port(port), pin(pin) {
-        // Konfigurieren Sie den Pin als Ausgang
-        *port &= ~(0x3 << (pin * 2));
-        *port |= (0x1 << (pin * 2));
+    Pin(GPIO_TypeDef* gpio, uint8_t pin, PinMode mode) : gpio(gpio), pin(pin), mode(mode) {
+        configure(mode);
+    }
+
+    void configure(PinMode mode) {
+        switch(mode) {
+            case PinMode::OUTPUT:
+                gpio->MODER &= ~(0x3 << (pin * 2));
+                gpio->MODER |= (0x1 << (pin * 2));
+                break;
+            case PinMode::INPUT:
+                gpio->MODER &= ~(0x3 << (pin * 2));
+                break;
+            case PinMode::ANALOG:
+                gpio->MODER |= (0x3 << (pin * 2));
+                break;
+            // Fügen Sie hier weitere Fälle für andere Modi hinzu
+        }
     }
 
     void toggle() {
-        *(port+5) ^= (0x1 << pin); // Zugriff auf ODR-Register zum Umschalten des Pins
+        gpio->ODR ^= (0x1 << pin);
+    }
+
+    void set() {
+        gpio->ODR |= (0x1 << pin);
+    }
+
+    void reset() {
+        gpio->ODR &= ~(0x1 << pin);
     }
 };
 

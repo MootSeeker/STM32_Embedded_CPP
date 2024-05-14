@@ -11,17 +11,25 @@
 #include "core.h"
 #include "pins.h"
 
+#include <memory>
+#include <array>
+
 class GPIO {
 public:
-    Pin* PB3;
+    std::array<std::unique_ptr<Pin>, 16> pins;
+    GPIO_TypeDef* gpio;
 
-    GPIO() {
-        RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;  // Takt für GPIOB aktivieren
-        PB3 = new Pin(&GPIOB->MODER, 3);
-    }
+    GPIO(GPIO_TypeDef* gpio) : gpio(gpio) {
+        if(gpio == GPIOA) {
+            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
+        } else if(gpio == GPIOB) {
+            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;
+        }
+        // Fügen Sie hier weitere else if Anweisungen für andere GPIOs hinzu
 
-    ~GPIO() {
-        delete PB3;
+        for(int i=0; i<16; i++) {
+            pins[i] = std::make_unique<Pin>(gpio, i, PinMode::OUTPUT);
+        }
     }
 };
 
