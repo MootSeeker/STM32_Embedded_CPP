@@ -82,6 +82,7 @@ By using Memory Mapped I/O, we can leverage the full power of the STM32 microcon
 
 
 
+
 ## Contributing 🤝
 
 Contributions are welcome! Please fork the repository, create a feature branch, commit your changes, and open a pull request.
