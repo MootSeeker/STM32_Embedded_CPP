@@ -17,13 +17,13 @@ Memory Mapped I/O involves assigning a fixed range of memory addresses to hardwa
 
 #### Benefits of Memory Mapped I/O:
 
-1. **Efficiency**: Directly accessing hardware registers via memory addresses eliminates the overhead associated with traditional I/O instructions, resulting in faster and more efficient hardware interactions. This is particularly important in time-critical applications where every cycle counts.
+1. **Efficiency**: Directly accessing hardware registers via memory addresses eliminates the overhead associated with traditional I/O instructions, resulting in faster and more efficient hardware interactions.
    
-2. **Simplicity**: Using pointers to access memory-mapped registers simplifies code, making it easier to read, write, and maintain. Developers can use standard C++ constructs to manipulate hardware registers, which reduces the complexity of the codebase.
+2. **Simplicity**: Using pointers to access memory-mapped registers simplifies code, making it easier to read, write, and maintain.
    
-3. **Flexibility**: MMIO allows for fine-grained control over hardware, enabling precise manipulation of peripheral settings and states. This is essential for configuring peripherals with specific requirements and for implementing custom control algorithms.
+3. **Flexibility**: MMIO allows for fine-grained control over hardware, enabling precise manipulation of peripheral settings and states.
    
-4. **Portability**: Code using MMIO can be easily adapted to different microcontrollers with similar memory-mapped architectures by adjusting base addresses. This makes it easier to port applications across different hardware platforms.
+4. **Portability**: Code using MMIO can be easily adapted to different microcontrollers with similar memory-mapped architectures by adjusting base addresses.
 
 By using Memory Mapped I/O, we can leverage the full power of the STM32 microcontroller's hardware capabilities while maintaining efficient and readable code.
 
@@ -70,6 +70,14 @@ By using Memory Mapped I/O, we can leverage the full power of the STM32 microcon
 - [ ] Implement class for USART
 - [ ] Create examples for all interfaces
 - [ ] Transition to Bare Metal, removing HAL dependencies
+
+## Statistics 📊
+
+- **Commits**: 19
+- **Open Issues**: 0
+- **Pull Requests**: 1
+- **Stars**: 0
+- **Forks**: 0
 
 ## Contributing 🤝
 
