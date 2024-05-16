@@ -1,9 +1,9 @@
 # STM32 Embedded C++ Project
 
 [![forthebadge](https://forthebadge.com/images/badges/powered-by-coffee.svg)](https://forthebadge.com) 
-[![forthebadge](https://forthebadge.com/images/badges/made-with-c.svg)](https://forthebadge.com) 
-[![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com) 
-[![forthebadge](https://forthebadge.com/images/badges/uses-git.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/made-with-c-plus-plus.svg)](https://forthebadge.com) 
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) 
+[![forthebadge](https://forthebadge.com/images/badges/for-you.svg)](https://forthebadge.com)
 
 
 Welcome to the STM32 Embedded C++ project repository! This project showcases how to use C++ for embedded programming on STM32 microcontrollers. It is designed as a learning resource for those who are transitioning from general C++ programming to embedded systems development.
