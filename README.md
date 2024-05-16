@@ -86,7 +86,6 @@ By using Memory Mapped I/O, we can leverage the full power of the STM32 microcon
 - C++
 - C
 - Assembly
-- Makefile
 
 ## Contributing 🤝
 
