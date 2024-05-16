@@ -31,6 +31,21 @@ Welcome to the STM32 Embedded C++ project repository! This project showcases how
 2. Open in STM32CubeIDE.
 3. Build and upload to your STM32 board.
 
+## ToDo
+
+- [ ] Complete GPIO class
+- [ ] Implement class for Timer
+- [ ] Implement class for ADC
+- [ ] Implement class for DAC
+- [ ] Implement class for CRC
+- [ ] Implement class for SPI
+- [ ] Implement class for I2C
+- [ ] Implement class for CAN
+- [ ] Implement class for QSPI
+- [ ] Implement class for USART
+- [ ] Create examples for all interfaces
+- [ ] Transition to Bare Metal, removing HAL dependencies
+
 ## Contributing
 
 Contributions are welcome! Please fork the repository, create a feature branch, commit your changes, and open a pull request.
