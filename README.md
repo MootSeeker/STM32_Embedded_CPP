@@ -78,9 +78,15 @@ By using Memory Mapped I/O, we can leverage the full power of the STM32 microcon
 ![Pull Requests](https://img.shields.io/github/issues-pr-raw/MootSeeker/STM32_Embedded_CPP)
 ![Stars](https://img.shields.io/github/stars/MootSeeker/STM32_Embedded_CPP)
 ![Forks](https://img.shields.io/github/forks/MootSeeker/STM32_Embedded_CPP)
+
+### Languages Used in This Repository
 ![Top Langs](https://img.shields.io/github/languages/top/MootSeeker/STM32_Embedded_CPP)
 ![Languages](https://img.shields.io/github/languages/count/MootSeeker/STM32_Embedded_CPP)
 
+- C++
+- C
+- Assembly
+- Makefile
 
 ## Contributing 🤝
 
