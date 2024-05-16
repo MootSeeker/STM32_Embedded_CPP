@@ -4,25 +4,21 @@ Welcome to the STM32 Embedded C++ project repository! This project showcases how
 
 ## Repository Structure
 
-- **src/**: Contains the source code files for the project.
-- **include/**: Contains the header files.
-- **examples/**: Contains example applications demonstrating various features of the GPIO class and other functionalities.
-- **docs/**: Contains documentation files and additional resources.
-- **tests/**: Contains unit tests for the codebase.
+- **Core/**: Core components and configurations.
+- **Drivers/**: Hardware drivers and related files.
 
 ## Features
 
-- **GPIO Class**: A comprehensive implementation of a General-Purpose Input/Output (GPIO) class for STM32 microcontrollers.
-- **C++11/14/17 Compatibility**: The codebase is written using modern C++ standards to leverage features like auto, constexpr, and template programming.
-- **HAL Integration**: Integration with the STM32 Hardware Abstraction Layer (HAL) for seamless hardware control.
-- **Examples and Demos**: Practical examples demonstrating how to use the GPIO class and other components in real-world scenarios.
+- **GPIO Class**: Comprehensive implementation for STM32 microcontrollers.
+- **Modern C++**: Utilizes C++11/14/17 features.
+- **HAL Integration**: Seamless hardware control via STM32 HAL.
 
 ## Getting Started
 
 ### Prerequisites
 
-- STM32CubeIDE or any compatible IDE for STM32 development.
-- Basic knowledge of C++ and embedded systems.
+- STM32CubeIDE or a compatible IDE.
+- Basic C++ and embedded systems knowledge.
 - STM32 development board (e.g., STM32F4 Discovery, STM32 Nucleo).
 
 ### Installation
@@ -32,41 +28,16 @@ Welcome to the STM32 Embedded C++ project repository! This project showcases how
     git clone https://github.com/MootSeeker/STM32_Embedded_CPP.git
     cd STM32_Embedded_CPP
     ```
-
-2. Open the project in STM32CubeIDE or your preferred development environment.
-
-3. Build and upload the project to your STM32 board.
-
-### Running Examples
-
-Navigate to the `examples/` directory and choose an example to run. Each example has its own README file with instructions on how to build and execute it.
-
-### Documentation
-
-Detailed documentation for the project can be found in the `docs/` directory. This includes:
-
-- GPIO Class Documentation
-- How to add new peripherals
-- Troubleshooting guide
+2. Open in STM32CubeIDE.
+3. Build and upload to your STM32 board.
 
 ## Contributing
 
-Contributions are welcome! Please fork the repository and use a feature branch. Pull requests are accepted.
-
-1. Fork the repository.
-2. Create a new feature branch (`git checkout -b feature/YourFeature`).
-3. Commit your changes (`git commit -am 'Add some feature'`).
-4. Push to the branch (`git push origin feature/YourFeature`).
-5. Create a new Pull Request.
+Contributions are welcome! Please fork the repository, create a feature branch, commit your changes, and open a pull request.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgements
-
-- Special thanks to the open-source community for providing the tools and resources that made this project possible.
-- Thanks to the STM32 team for their excellent HAL and development tools.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contact
 
