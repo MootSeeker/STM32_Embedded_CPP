@@ -73,11 +73,11 @@ By using Memory Mapped I/O, we can leverage the full power of the STM32 microcon
 
 ## Statistics 📊
 
-- **[Commits](https://github.com/MootSeeker/STM32_Embedded_CPP/commits/main)**: ![Commits](https://img.shields.io/github/commit-activity/m/MootSeeker/STM32_Embedded_CPP)
-- **[Open Issues](https://github.com/MootSeeker/STM32_Embedded_CPP/issues)**: ![Issues](https://img.shields.io/github/issues-raw/MootSeeker/STM32_Embedded_CPP)
-- **[Pull Requests](https://github.com/MootSeeker/STM32_Embedded_CPP/pulls)**: ![Pull Requests](https://img.shields.io/github/issues-pr-raw/MootSeeker/STM32_Embedded_CPP)
-- **[Stars](https://github.com/MootSeeker/STM32_Embedded_CPP/stargazers)**: ![Stars](https://img.shields.io/github/stars/MootSeeker/STM32_Embedded_CPP)
-- **[Forks](https://github.com/MootSeeker/STM32_Embedded_CPP/network/members)**: ![Forks](https://img.shields.io/github/forks/MootSeeker/STM32_Embedded_CPP)
+![Commits](https://img.shields.io/github/commit-activity/m/MootSeeker/STM32_Embedded_CPP)
+![Open Issues](https://img.shields.io/github/issues-raw/MootSeeker/STM32_Embedded_CPP)
+![Pull Requests](https://img.shields.io/github/issues-pr-raw/MootSeeker/STM32_Embedded_CPP)
+![Stars](https://img.shields.io/github/stars/MootSeeker/STM32_Embedded_CPP)
+![Forks](https://img.shields.io/github/forks/MootSeeker/STM32_Embedded_CPP)
 
 ## Contributing 🤝
 
