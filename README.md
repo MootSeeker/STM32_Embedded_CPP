@@ -1,15 +1,15 @@
-# STM32 Embedded C++ Project
+# STM32 Embedded C++ Project 🚀
 
 [![forthebadge](https://forthebadge.com/images/badges/powered-by-coffee.svg)](https://forthebadge.com) 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-c-plus-plus.svg)](https://forthebadge.com) 
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) 
 [![forthebadge](https://forthebadge.com/images/badges/for-you.svg)](https://forthebadge.com)
 
-## Overview
+## Overview 🌐
 
 This repository demonstrates the application of C++ in embedded systems, specifically using STM32 microcontrollers. The goal is to provide a learning resource for developers transitioning from general C++ programming to embedded development. The project includes core components, hardware drivers, and practical examples, all aimed at showcasing the capabilities of STM32 microcontrollers and the efficiency of C++ in embedded programming.
 
-### Memory Mapped I/O
+### Memory Mapped I/O 🧠
 
 In this project, I aim to implement Memory Mapped I/O (MMIO) for hardware interaction. MMIO maps peripheral control registers to specific memory addresses, allowing direct read/write operations on hardware registers through standard memory access instructions.
 
@@ -27,26 +27,26 @@ Memory Mapped I/O involves assigning a fixed range of memory addresses to hardwa
 
 By using Memory Mapped I/O, we can leverage the full power of the STM32 microcontroller's hardware capabilities while maintaining efficient and readable code.
 
-## Repository Structure
+## Repository Structure 🗂️
 
 - **Core/**: Core components and configurations.
 - **Drivers/**: Hardware drivers and related files.
 
-## Features
+## Features ✨
 
 - **GPIO Class**: Comprehensive implementation for STM32 microcontrollers.
 - **Modern C++**: Utilizes C++11/14/17 features.
 - **HAL Integration**: Seamless hardware control via STM32 HAL.
 
-## Getting Started
+## Getting Started 🚀
 
-### Prerequisites
+### Prerequisites 📋
 
 - STM32CubeIDE or a compatible IDE.
 - Basic C++ and embedded systems knowledge.
 - STM32 development board (e.g., STM32F4 Discovery, STM32 Nucleo).
 
-### Installation
+### Installation 💻
 
 1. Clone the repository:
     ```sh
@@ -56,7 +56,7 @@ By using Memory Mapped I/O, we can leverage the full power of the STM32 microcon
 2. Open in STM32CubeIDE.
 3. Build and upload to your STM32 board.
 
-## ToDo
+## ToDo ✅
 
 - [ ] Complete GPIO class
 - [ ] Implement class for Timer
@@ -71,15 +71,15 @@ By using Memory Mapped I/O, we can leverage the full power of the STM32 microcon
 - [ ] Create examples for all interfaces
 - [ ] Transition to Bare Metal, removing HAL dependencies
 
-## Contributing
+## Contributing 🤝
 
 Contributions are welcome! Please fork the repository, create a feature branch, commit your changes, and open a pull request.
 
-## License
+## License 📜
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Contact
+## Contact 📧
 
 For questions or feedback, please open an issue on the repository or contact [MootSeeker](https://github.com/MootSeeker).
 
