@@ -1,11 +1,24 @@
+# STM32 Embedded C++ Project
+
 [![forthebadge](https://forthebadge.com/images/badges/powered-by-coffee.svg)](https://forthebadge.com) 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-c-plus-plus.svg)](https://forthebadge.com) 
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) 
 [![forthebadge](https://forthebadge.com/images/badges/for-you.svg)](https://forthebadge.com)
 
-# STM32 Embedded C++ Project
+## Overview
 
-Welcome to the STM32 Embedded C++ project repository! This project showcases how to use C++ for embedded programming on STM32 microcontrollers. It is designed as a learning resource for those who are transitioning from general C++ programming to embedded systems development.
+This repository demonstrates the application of C++ in embedded systems, specifically using STM32 microcontrollers. The goal is to provide a learning resource for developers transitioning from general C++ programming to embedded development. The project includes core components, hardware drivers, and practical examples, all aimed at showcasing the capabilities of STM32 microcontrollers and the efficiency of C++ in embedded programming.
+
+### Memory Mapped I/O
+
+In this project, I aim to implement Memory Mapped I/O (MMIO) for hardware interaction. MMIO maps peripheral control registers to specific memory addresses, allowing direct read/write operations on hardware registers through standard memory access instructions.
+
+#### Benefits of Memory Mapped I/O:
+
+1. **Efficiency**: Directly accessing hardware registers via memory addresses eliminates the overhead associated with traditional I/O instructions, resulting in faster and more efficient hardware interactions.
+2. **Simplicity**: Using pointers to access memory-mapped registers simplifies code, making it easier to read, write, and maintain.
+3. **Flexibility**: MMIO allows for fine-grained control over hardware, enabling precise manipulation of peripheral settings and states.
+4. **Portability**: Code using MMIO can be easily adapted to different microcontrollers with similar memory-mapped architectures by adjusting base addresses.
 
 ## Repository Structure
 
