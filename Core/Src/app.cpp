@@ -7,24 +7,20 @@
 
 #include "app.h"
 #include "gpio.hpp"
+#include "button.h"
+#include "led.h"
 
 uint8_t application_main( void )
 {
+	// LED-Objekt erstellen
+	LED ledPin_PB3( GPIOB, 3 );
 
-    // Erstellen Sie ein GPIO-Objekt für Port A
-    GPIO gpioA(GPIOB);
-
-    // Konfigurieren Sie Pin 0 als Ausgang
-    gpioA.pins[3]->configure(PinMode::OUTPUT);
-
-    // Setzen Sie Pin 0 auf HIGH
-    gpioA.pins[3]->write(true);
-
-
+    // Button-Objekt erstellen
+    Button button_PA7(GPIOA, 7);
 
 	while( 1 )
 	{
-		gpioA.pins[3]->toggle();
+		ledPin_PB3.toggle( );
 		for(int i = 0; i < 1000000; i++);  // Verzögerung
 	}
 

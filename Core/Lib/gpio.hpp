@@ -5,33 +5,58 @@
  *      Author: kevin.perillo
  */
 
-#ifndef LIB_GPIO_HPP_
-#define LIB_GPIO_HPP_
+#ifndef GPIO_H
+#define GPIO_H
 
 #include "core.h"
-#include "pins.h"
+#include "stm32l4xx.h"
 
-#include <memory>
-#include <array>
-
-class GPIO {
+class GPIO : public CORE_IO {
 public:
-    std::array<std::unique_ptr<Pin>, 16> pins;
-    GPIO_TypeDef* gpio;
+    enum Mode {
+        INPUT = 0x00,
+        OUTPUT = 0x01,
+        ALTERNATE = 0x02,
+        ANALOG = 0x03
+    };
 
-    GPIO(GPIO_TypeDef* gpio) : gpio(gpio) {
-        if(gpio == GPIOA) {
-            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
-        } else if(gpio == GPIOB) {
-            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;
-        }
-        // Fügen Sie hier weitere else if Anweisungen für andere GPIOs hinzu
+    enum Pull {
+        NO_PULL = 0x00,
+        PULL_UP = 0x01,
+        PULL_DOWN = 0x02
+    };
 
-        for(int i=0; i<16; i++) {
-            pins[i] = std::make_unique<Pin>(gpio, i, PinMode::OUTPUT);
-        }
-    }
+    enum Speed {
+        LOW = 0x00,
+        MEDIUM = 0x01,
+        HIGH = 0x02,
+        VERY_HIGH = 0x03
+    };
+
+    GPIO(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
+    ~GPIO() {}
+
+    void configure(Mode mode, Pull pull, Speed speed, uint8_t alternate = 0);
+
+    void write(uint32_t data) override;
+    unsigned read() const override;
+    void stream(uint32_t* buffer) override;
+
+    void toggle();
+    void lock();
+    void handle_exti_irq();
+    void exti_callback();
+
+private:
+    GPIO_TypeDef* port;
+    uint16_t pin;
+
+    Mode mode;
+    Pull pull;
+    Speed speed;
+    uint8_t alternate;
+
+    void enable_gpio_clock();
 };
 
-
-#endif /* LIB_GPIO_HPP_ */
+#endif // GPIO_H
