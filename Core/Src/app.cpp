@@ -6,27 +6,22 @@
  */
 
 #include "app.h"
-#include "pins.h"
-
-  #define LED_BANK (GPIOB)
-  #define LED_PIN  (5)
-
-bGPIO     led_gpio;
-bGPIO_PIN board_led;
+#include "gpio.hpp"
+#include "button.h"
+#include "led.h"
 
 uint8_t application_main( void )
 {
-	// Initialize the LED pin's GPIO bank.
-	  led_gpio = bGPIO(LED_BANK);
+	// LED-Objekt erstellen
+	LED ledPin_PB3( GPIOB, 3 );
 
-	  // Initialize the LED pin.
-	  board_led = bGPIO_PIN(&led_gpio, LED_PIN, pGPIO_OUT_PP);
-
+    // Button-Objekt erstellen
+    Button button_PA7(GPIOA, 7);
 
 	while( 1 )
 	{
-		board_led.toggle();
-		HAL_Delay( 500 );
+		ledPin_PB3.toggle( );
+		for(int i = 0; i < 1000000; i++);  // Verzögerung
 	}
 
 	return 0;
