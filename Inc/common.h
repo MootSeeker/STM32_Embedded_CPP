@@ -10,6 +10,7 @@
 
 
 #ifdef STM32L432KC
+#define STM32L432xx
 #include <stm32l432xx.h>
 #include <stm32l4xx.h>
 #include <system_stm32l4xx.h>

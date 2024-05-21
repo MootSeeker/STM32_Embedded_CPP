@@ -11,130 +11,95 @@
 
 #include <common.h>
 
-enum RccSysClockSrc
-{
-	RCC_SYSCLOCK_SRC_HSI = 0,
-	RCC_SYSCLOCK_SRC_HSE,
-	RCC_SYSCLOCK_SRC_PLL
-};
+class rcc {
+	enum class GPIO_Port
+	{
+		GPIO_PORTA,
+		GPIO_PORTB,
+		GPIO_PORTC,
+		GPIO_PORTD,
+		GPIO_PORTE,
+		GPIO_PORTF,
+		GPIO_PORTG,
+		GPIO_PORTH
+	};
 
+	enum class USART_Port
+	{
+		USART_PORT1,
+		USART_PORT2,
+		USART_PORT3
+	};
 
-enum RccPllClockSrc
-{
-	RCC_PLLCLOCK_SRC_HSI = 0,
-	RCC_PLLCLOCK_SRC_HSE
-};
+	enum class I2C_Port
+	{
+		I2C_PORT1,
+		I2C_PORT2,
+		I2C_PORT3
+	};
 
-enum RccPort
-{
-	RCC_PORT_A = 0,
-	RCC_PORT_B,
-	RCC_PORT_C,
-	RCC_PORT_D,
-	RCC_PORT_E,
-	RCC_PORT_F,
-	RCC_PORT_G,
-	RCC_PORT_H,
-	RCC_PORT_I,
-	RCC_PORT_J,
-	RCC_PORT_K
-};
+	enum class SPI_Port
+	{
+		SPI_PORT1,
+		SPI_PORT2,
+		SPI_PORT3
+	};
 
-enum RccPeripheral
-{
-	RCC_TSC = 0,	// AHB peripherals
-	RCC_CRC,
-	RCC_FLITF,
-	RCC_SRAM,
-	RCC_DMA2,
-	RCC_DMA1,
-	RCC_ETH,
-	RCC_SYSCFGCOMP,		// APB2 peripherals
-	RCC_USART6,
-	RCC_USART7,
-	RCC_USART8,
-	RCC_ADC1,
-	RCC_ADC2,
-	RCC_ADC3,
-	RCC_TIM1,
-	RCC_SPI1,
-	RCC_USART1,
-	RCC_TIM15,
-	RCC_TIM16,
-	RCC_TIM17,
-	RCC_DBGMCU,
-	RCC_AFIO,
-	RCC_TIM2,		// APB1 peripherals
-	RCC_TIM3,
-	RCC_TIM4,
-	RCC_TIM6,
-	RCC_TIM7,
-	RCC_TIM14,
-	RCC_WWDG,
-	RCC_SPI2,
-	RCC_USART2,
-	RCC_USART3,
-	RCC_USART4,
-	RCC_USART5,
-	RCC_I2C1,
-	RCC_I2C2,
-	RCC_USB,
-	RCC_CAN,
-	RCC_CRS,
-	RCC_PWR,
-	RCC_BKP,
-	RCC_DAC1,
-	RCC_DAC2,
-	RCC_CEC,
-	RCC_SPI3,
-	RCC_SPI4,
-	RCC_SPI5
-};
+	enum class ADC_Port
+	{
+		ADC_PORT1
+	};
 
-struct RccPeripheralHandle
-{
-	uint8_t count = 0;
-	bool exists = false;
-	volatile uint32_t* enr;
-	uint32_t enable;
-};
+	enum class TIM_Port
+	{
+		TIM_PORT1,
+		TIM_PORT2,
+		TIM_PORT3,
+		TIM_PORT4,
+		TIM_PORT5,
+		TIM_PORT6,
+		TIM_PORT7,
+		TIM_PORT8,
+		TIM_PORT15,
+		TIM_PORT16,
+		TIM_PORT17
+	};
 
-struct RccPortHandle
-{
-	uint8_t count = 0;
-	bool exists = false;
-	volatile uint32_t* enr;
-	uint32_t enable;
-};
+	enum class DMA_Port
+	{
+		DMA_PORT1,
+		DMA_PORT2
+	};
 
-struct RccSysClockConfig
-{
-	RccSysClockSrc source;
-	uint32_t base_freq;		// Frequency (Hz) of the HSE/HSI source.
-	bool HSE_bypass = false;
-	bool HSI_enabled = true;
-	bool PLL_enabled = false;
-	RccPllClockSrc PLL_source;
-	uint32_t PLLM;
-	uint32_t PLLN;
-	uint32_t PLLP;
-	uint32_t PLLQ;
-	uint32_t AHB_prescale;
-	uint32_t APB1_prescale;
-	uint32_t APB2_prescale;
-	uint8_t FLASH_latency;	// Wait states.
-};
+public:
+	rcc();
+	void enableHSI();
+	void enableHSE();
+	void enableLSI();
+	void enableLSE();
+	void enablePLL();
+	void configureSystemClock();
 
-class rcc
-{
-	public:
-		static bool enable( RccPeripheral peripheral );
-		static bool disable( RccPeripheral peripheral );
-		static bool enablePort( RccPort port );
-		static bool disablePort( RccPort port );
+	void enableGPIO(GPIO_Port port);
+	void enableUSART(USART_Port port);
+	void enableI2C(I2C_Port port);
+	void enableSPI(SPI_Port port);
+	void enableADC(ADC_Port port);
+	void enableTIM(TIM_Port port);
+	void enableDAC();
+	void enableDMA(DMA_Port port);
 
-		static bool configureSysClock( RccSysClockConfig cfg );
-		static bool enableLSE( bool on );
+	void enableRTC();
+	void enableIWDG();
+	void enableWWDG();
+
+private:
+	void setFlashLatency();
+	void configurePLL();
+	void configureVoltageScaling();
+	void configureOscillators();
+	void configureClocks();
+
 };
 
 #endif /* RCC_H_ */

@@ -16,14 +16,16 @@
  ******************************************************************************
  */
 
+#include <common.h>
 #include <app.h>
+#include <rcc.h>
+
 
 
 int main(void)
 {
-    /* Loop forever */
-	for( ;; )
-	{
+    while (1)
+    {
 
-	}
+    }
 }
