@@ -10,7 +10,6 @@
 
 // Konstruktor: Hier wird die Basisadresse des GPIO-Ports gesetzt
 GPIO::GPIO(Port port, uint8_t pin) : pin(pin), portBase([port]() -> GPIO_TypeDef* {
-
     switch (port) {
         case Port::PORTA: RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN; return reinterpret_cast<GPIO_TypeDef*>(GPIOA_BASE);
         case Port::PORTB: RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN; return reinterpret_cast<GPIO_TypeDef*>(GPIOB_BASE);
@@ -31,6 +30,7 @@ GPIO::GPIO(Port port, uint8_t pin) : pin(pin), portBase([port]() -> GPIO_TypeDef
         default: return nullptr;
     }
 }()) {}
+
 
 // Diese Methode verwendet die Basisadresse, um den Pin-Modus zu setzen
 void GPIO::setMode( Mode mode )

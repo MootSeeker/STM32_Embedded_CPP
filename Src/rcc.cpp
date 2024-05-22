@@ -6,7 +6,7 @@ rcc::rcc( )
     configureOscillators( );
     setFlashLatency( );
     configurePLL( );
-    configureClocks( );
+//    configureClocks( );
 }
 
 void rcc::enableHSI( )

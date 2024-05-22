@@ -27,7 +27,7 @@
 int main( void )
 {
 	// Erstelle ein Clock-Objekt, um die System Clock auf 64MHz einzustellen
-	Clock systemClock;
+//	Clock systemClock;
 
 	GPIO led( GPIO::Port::PORTB, 3 ); // LED an PB0
 	led.setMode( GPIO::Mode::OUTPUT );
