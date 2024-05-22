@@ -20,16 +20,25 @@
 #include <app.h>
 #include <rcc.h>
 #include <clock.h>
+#include <gpio.h>
 
 
 
-int main(void)
+int main( void )
 {
-    // Erstelle ein Clock-Objekt, um die System Clock auf 64MHz einzustellen
-    Clock systemClock;
+	// Erstelle ein Clock-Objekt, um die System Clock auf 64MHz einzustellen
+	Clock systemClock;
 
-    while (1)
-    {
+	GPIO led( GPIO::Port::PORTB, 3 ); // LED an PB0
+	led.setMode( GPIO::Mode::OUTPUT );
+	led.setPull( GPIO::Pull::NO_PULL );
+	led.setSpeed( GPIO::Speed::VERY_HIGH );
 
-    }
+	while( 1 )
+	{
+		led.write( true );  // LED an
+		for(  int i = 0; i < 100000; i++ ); // Wartezeit
+		led.write( false ); // LED aus
+		for(  int i = 0; i < 100000; i++ ); // Wartezeit
+	}
 }
