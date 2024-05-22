@@ -57,6 +57,8 @@ class rcc
 		void enablePLL( );
 		void configureSystemClock( );
 
+		void setFlashLatency( );
+
 		void enableGPIO( GPIO_Port port );
 		void enableUSART( USART_Port port );
 		void enableI2C( I2C_Port port );
@@ -71,7 +73,7 @@ class rcc
 		void enableWWDG( );
 
 	private:
-		void setFlashLatency( );
+
 		void configurePLL( );
 		void configureVoltageScaling( );
 		void configureOscillators( );

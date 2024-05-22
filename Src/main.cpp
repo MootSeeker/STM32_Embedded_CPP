@@ -19,11 +19,15 @@
 #include <common.h>
 #include <app.h>
 #include <rcc.h>
+#include <clock.h>
 
 
 
 int main(void)
 {
+    // Erstelle ein Clock-Objekt, um die System Clock auf 64MHz einzustellen
+    Clock systemClock;
+
     while (1)
     {
 
