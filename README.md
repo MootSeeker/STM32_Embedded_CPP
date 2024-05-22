@@ -77,24 +77,24 @@ By using Memory Mapped I/O, we can leverage the full power of the STM32 microcon
 
 Test status for each supported board.
 
-&nbsp; | MCU | Board name | GPIO | USART | Timer | Interrupts | I2C | SPI | I2S | Ethernet | ADC | DAC
-----|--------|-----|---|---|---|---|---|---|---|---|---|---|
-**F0** | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp;
-&nbsp; | STM32F042K6T  | nucleo-f042k6 | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
-&nbsp; | STM32F051R8T  | stm32f0-discovery | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
-&nbsp; | STM32F072C8Tx  | otter_pill | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
-**F1** | &nbsp; | &nbsp; | &nbsp;
-&nbsp; | STM32F103C8   | blue_pill | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
-&nbsp; | CH32F103C8   | blue_pill_wch | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
-&nbsp; | STM32F103CB  | maple_mini | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
-**F4** | &nbsp; | &nbsp; | &nbsp;
-&nbsp; | STM32F407VGT  | stm32f4-discovery | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
-**L4** | &nbsp; | &nbsp;
-&nbsp; | STM32L433CCT | Fox Pill | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
-&nbsp; | STM32L496ZG | Nucleo-L496ZG-P | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
-&nbsp; | STM32L432KCU6  | nucleo-l432kc | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
-**F7** | &nbsp; | &nbsp; | &nbsp;
-&nbsp; | STM32F746ZG  | nucleo-f746zg | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
+&nbsp; | MCU | Board name | RCC | GPIO | USART | Timer | Interrupts | I2C | SPI | I2S | Ethernet | ADC | DAC
+----|--------|-----|---|---|---|---|---|---|---|---|---|---|---|
+**F0** | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp;
+&nbsp; | STM32F042K6T  | nucleo-f042k6 | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
+&nbsp; | STM32F051R8T  | stm32f0-discovery | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
+&nbsp; | STM32F072C8Tx  | otter_pill | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
+**F1** | &nbsp; | &nbsp; | &nbsp; | &nbsp;
+&nbsp; | STM32F103C8   | blue_pill | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
+&nbsp; | CH32F103C8   | blue_pill_wch | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
+&nbsp; | STM32F103CB  | maple_mini | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
+**F4** | &nbsp; | &nbsp; | &nbsp; | &nbsp;
+&nbsp; | STM32F407VGT  | stm32f4-discovery | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
+**L4** | &nbsp; | &nbsp; | &nbsp;
+&nbsp; | STM32L433CCT | Fox Pill | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
+&nbsp; | STM32L496ZG | Nucleo-L496ZG-P | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
+&nbsp; | STM32L432KCU6  | nucleo-l432kc | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
+**F7** | &nbsp; | &nbsp; | &nbsp; | &nbsp;
+&nbsp; | STM32F746ZG  | nucleo-f746zg | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | ⚠️ | &nbsp; | &nbsp;
 
 
 ### Legend: 
