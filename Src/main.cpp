@@ -19,15 +19,25 @@
 #include <common.h>
 #include <app.h>
 #include <rcc.h>
-#include <clock.h>
 #include <gpio.h>
 
 
 
 int main( void )
 {
-	// Erstelle ein Clock-Objekt, um die System Clock auf 64MHz einzustellen
-//	Clock systemClock;
+	CLOCK CLOCK;
+
+    // Enable HSI clock
+	CLOCK.enableHSI();
+
+    // Configure PLL
+	CLOCK.configurePLL();
+
+    // Enable PLL
+	CLOCK.enablePLL();
+
+    // Select PLL as system clock
+	CLOCK.selectSystemClock();
 
 	GPIO led( GPIO::Port::PORTB, 3 ); // LED an PB0
 	led.setMode( GPIO::Mode::OUTPUT );
