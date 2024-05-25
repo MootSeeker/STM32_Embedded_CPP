@@ -8,7 +8,16 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
+// Include standard libraries
+#ifdef __cplusplus
+#include <cstdint>
+#include <cstdlib>
+#else
+#include <stdint.h>
+#include <stdlib.h>
+#endif
 
+// Include STM32 specific headers
 #ifdef STM32L432KC
 #define STM32L432xx
 #include <stm32l432xx.h>
@@ -17,32 +26,7 @@
 #endif
 
 
-#ifdef __stm32f0
-#include "stm32f0/stm32f0xx.h"
-#elif defined __stm32f1
-#include "stm32f1/stm32f1xx.h"
-#endif
 
-#ifdef __stm32f3
-#include "stm32f3/stm32f3xx.h"
-#endif
-
-#ifdef __stm32f4
-#include "stm32f4/stm32f4xx.h"
-#endif
-
-#ifdef __stm32f7
-#include "stm32f7/stm32f7xx.h"
-#endif
-
-
-#ifdef __cplusplus
-#include <cstdint>
-#include <cstdlib>
-#else
-#include <stdint.h>
-#include <stdlib.h>
-#endif
 
 
 #endif /* COMMON_H_ */
