@@ -17,27 +17,61 @@
  */
 
 #include <common.h>
-#include <app.h>
+#include <system.h>
+
 #include <rcc.h>
 #include <gpio.h>
+#include <usart.h>
 
+#include <app.h>
+
+uint32_t SystemCoreClock = 64000000UL;
+
+void init_usart2_pins() {
+    // Enable GPIOA clock (assuming USART2 TX on PA2 and RX on PA15)
+    RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
+
+    // Configure PA2 as USART2_TX
+    GPIOA->MODER &= ~(GPIO_MODER_MODE2); // Clear mode
+    GPIOA->MODER |= GPIO_MODER_MODE2_1;  // Set to alternate function mode
+    GPIOA->AFR[0] |= (7 << (2 * 4));     // AF7 for USART2_TX (PA2)
+
+    // Configure PA15 as USART2_RX
+    GPIOA->MODER &= ~(GPIO_MODER_MODE15); // Clear mode
+    GPIOA->MODER |= GPIO_MODER_MODE15_1;  // Set to alternate function mode
+    GPIOA->AFR[1] |= (7 << ((15 - 8) * 4)); // AF7 for USART2_RX (PA15)
+}
 
 
 int main( void )
 {
 	CLOCK CLOCK;
 
-    // Enable HSI clock
-	CLOCK.enableHSI();
+	CLOCK.setSystemClockTo64MHz( );
 
-    // Configure PLL
-	CLOCK.configurePLL();
+    // SysTick-Interrupt konfigurieren
+    if (SysTick_Config(SystemCoreClock / (1000U / (uint32_t)1))) { // 1 ms Ticks
+        // Handle error
+        while (1);
+    }
 
-    // Enable PLL
-	CLOCK.enablePLL();
+    // Initialize USART2 pins
+    init_usart2_pins();
 
-    // Select PLL as system clock
-	CLOCK.selectSystemClock();
+    // Enable USART2 clock
+    RCC->APB1ENR1 |= RCC_APB1ENR1_USART2EN;
+
+    // Initialize USART2
+    USART usart2(USART::Usart2);
+    usart2.setUsartState(USART::Disabled); // Disable USART before configuration
+    usart2.set_baudrate(USART::BR_115200); // Set baudrate to 115200
+    usart2.setWordLength(USART::Start1_Data8_StopN); // 8 data bits
+    usart2.setStopBits(USART::StopBits1); // 1 stop bit
+    usart2.setParityControl(USART::Disabled); // No parity
+    usart2.setTransmitterState(USART::Enabled); // Enable transmitter
+    usart2.setReceiverState(USART::Enabled); // Enable receiver
+    usart2.setUsartState(USART::Enabled); // Enable USART
+
 
 	GPIO led( GPIO::Port::PORTB, 3 ); // LED an PB0
 	led.setMode( GPIO::Mode::OUTPUT );
@@ -46,9 +80,14 @@ int main( void )
 
 	while( 1 )
 	{
+	    // Transmit "Hello World" string
+	    usart2.tx_str("Hello World");
+
 		led.write( true );  // LED an
-		for(  int i = 0; i < 100000; i++ ); // Wartezeit
+		delay_ms( 500 );
 		led.write( false ); // LED aus
-		for(  int i = 0; i < 100000; i++ ); // Wartezeit
+		delay_ms( 500 );
 	}
+
+	return 0;
 }
