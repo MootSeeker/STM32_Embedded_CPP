@@ -8,6 +8,14 @@
 #ifndef GPIO_H_
 #define GPIO_H_
 
+#ifdef UNIT_TESTING
+    #include "mock_stm32l4xx.h" // For unit testing: uses mock peripherals
+#else
+    #include "stm32l4xx.h"      // For firmware: uses real STM32 headers
+                                // Ensure CMake include paths are set up for "stm32l4xx.h"
+                                // e.g., Drivers/CMSIS/Device/ST/STM32L4xx/Include
+#endif
+
 #include "common.h"
 
 class GPIO {

@@ -11,23 +11,40 @@
 // Konstruktor: Hier wird die Basisadresse des GPIO-Ports gesetzt
 GPIO::GPIO(Port port, uint8_t pin) : pin(pin), portBase([port]() -> GPIO_TypeDef* {
     switch (port) {
-        case Port::PORTA: RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN; return reinterpret_cast<GPIO_TypeDef*>(GPIOA_BASE);
-        case Port::PORTB: RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN; return reinterpret_cast<GPIO_TypeDef*>(GPIOB_BASE);
-        case Port::PORTC: RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN; return reinterpret_cast<GPIO_TypeDef*>(GPIOC_BASE);
+        case Port::PORTA:
+            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
+            return reinterpret_cast<GPIO_TypeDef*>(GPIOA_BASE);
+        case Port::PORTB:
+            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;
+            return reinterpret_cast<GPIO_TypeDef*>(GPIOB_BASE);
+        case Port::PORTC:
+            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN;
+            return reinterpret_cast<GPIO_TypeDef*>(GPIOC_BASE);
 #ifdef RCC_AHB2ENR_GPIODEN
-        case Port::PORTD: RCC->AHB2ENR |= RCC_AHB2ENR_GPIODEN; return reinterpret_cast<GPIO_TypeDef*>(GPIOD_BASE)
+        case Port::PORTD:
+            RCC->AHB2ENR |= RCC_AHB2ENR_GPIODEN;
+            return reinterpret_cast<GPIO_TypeDef*>(GPIOD_BASE);
 #endif
 #ifdef RCC_AHB2ENR_GPIOEEN
-        case Port::PORTE: RCC->AHB2ENR |= RCC_AHB2ENR_GPIOEEN; return reinterpret_cast<GPIO_TypeDef*>(GPIOE_BASE)
+        case Port::PORTE:
+            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOEEN;
+            return reinterpret_cast<GPIO_TypeDef*>(GPIOE_BASE);
 #endif
 #ifdef RCC_AHB2ENR_GPIOFEN
-        case Port::PORTF: RCC->AHB2ENR |= RCC_AHB2ENR_GPIOFEN; return reinterpret_cast<GPIO_TypeDef*>(GPIOF_BASE)
+        case Port::PORTF:
+            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOFEN;
+            return reinterpret_cast<GPIO_TypeDef*>(GPIOF_BASE);
 #endif
 #ifdef RCC_AHB2ENR_GPIOGEN
-        case Port::PORTG: RCC->AHB2ENR |= RCC_AHB2ENR_GPIOGEN; return reinterpret_cast<GPIO_TypeDef*>(GPIOG_BASE)
+        case Port::PORTG:
+            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOGEN;
+            return reinterpret_cast<GPIO_TypeDef*>(GPIOG_BASE);
 #endif
-        case Port::PORTH: RCC->AHB2ENR |= RCC_AHB2ENR_GPIOHEN; return reinterpret_cast<GPIO_TypeDef*>(GPIOH_BASE);
-        default: return nullptr;
+        case Port::PORTH:
+            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOHEN;
+            return reinterpret_cast<GPIO_TypeDef*>(GPIOH_BASE);
+        default:
+            return nullptr;
     }
 }()) {}
 
