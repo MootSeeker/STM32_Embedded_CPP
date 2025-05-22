@@ -8,141 +8,159 @@
 
 #include "gpio.h"
 
-// Konstruktor: Hier wird die Basisadresse des GPIO-Ports gesetzt
+// Constructor: Sets up GPIO port and enables its clock
 GPIO::GPIO(Port port, uint8_t pin) : pin(pin), portBase([port]() -> GPIO_TypeDef* {
+    GPIO_TypeDef* gpio = nullptr;
+    uint32_t enableBit = 0;
+
     switch (port) {
-        case Port::PORTA:
-            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
-            return reinterpret_cast<GPIO_TypeDef*>(GPIOA_BASE);
-        case Port::PORTB:
-            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;
-            return reinterpret_cast<GPIO_TypeDef*>(GPIOB_BASE);
-        case Port::PORTC:
-            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN;
-            return reinterpret_cast<GPIO_TypeDef*>(GPIOC_BASE);
+        case Port::PORTA: gpio = GPIOA; enableBit = RCC_AHB2ENR_GPIOAEN; break;
+        case Port::PORTB: gpio = GPIOB; enableBit = RCC_AHB2ENR_GPIOBEN; break;
+        case Port::PORTC: gpio = GPIOC; enableBit = RCC_AHB2ENR_GPIOCEN; break;
 #ifdef RCC_AHB2ENR_GPIODEN
-        case Port::PORTD:
-            RCC->AHB2ENR |= RCC_AHB2ENR_GPIODEN;
-            return reinterpret_cast<GPIO_TypeDef*>(GPIOD_BASE);
+        case Port::PORTD: gpio = GPIOD; enableBit = RCC_AHB2ENR_GPIODEN; break;
 #endif
 #ifdef RCC_AHB2ENR_GPIOEEN
-        case Port::PORTE:
-            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOEEN;
-            return reinterpret_cast<GPIO_TypeDef*>(GPIOE_BASE);
+        case Port::PORTE: gpio = GPIOE; enableBit = RCC_AHB2ENR_GPIOEEN; break;
 #endif
 #ifdef RCC_AHB2ENR_GPIOFEN
-        case Port::PORTF:
-            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOFEN;
-            return reinterpret_cast<GPIO_TypeDef*>(GPIOF_BASE);
+        case Port::PORTF: gpio = GPIOF; enableBit = RCC_AHB2ENR_GPIOFEN; break;
 #endif
 #ifdef RCC_AHB2ENR_GPIOGEN
-        case Port::PORTG:
-            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOGEN;
-            return reinterpret_cast<GPIO_TypeDef*>(GPIOG_BASE);
+        case Port::PORTG: gpio = GPIOG; enableBit = RCC_AHB2ENR_GPIOGEN; break;
 #endif
-        case Port::PORTH:
-            RCC->AHB2ENR |= RCC_AHB2ENR_GPIOHEN;
-            return reinterpret_cast<GPIO_TypeDef*>(GPIOH_BASE);
-        default:
-            return nullptr;
+        case Port::PORTH: gpio = GPIOH; enableBit = RCC_AHB2ENR_GPIOHEN; break;
+        default: return nullptr;
     }
-}()) {}
+
+    if (gpio != nullptr) {
+        RCC->AHB2ENR |= enableBit;
+    }
+
+    return gpio;
+}()) {
+    // Constructor body is empty - all initialization is done in member initializer list
+}
 
 
 // Diese Methode verwendet die Basisadresse, um den Pin-Modus zu setzen
-void GPIO::setMode( Mode mode )
+void GPIO::setMode(Mode mode)
 {
-	portBase->MODER &= ~( 0x3 << ( pin * 2 ) );
-	switch ( mode )
-	{
-		case Mode::INPUT:
-			portBase->MODER |= ( 0x0 << ( pin * 2 ) );
-		break;
-		case Mode::OUTPUT:
-			portBase->MODER |= ( 0x1 << ( pin * 2 ) );
-		break;
-		case Mode::ALTERNATE:
-			portBase->MODER |= ( 0x2 << ( pin * 2 ) );
-		break;
-		case Mode::ANALOG:
-		default:	// Default case is analog configuration to save power
-			portBase->MODER |= ( 0x3 << ( pin * 2 ) );
-		break;
-	}
+#ifdef UNIT_TESTING
+    // Extra safety check for nullptr in test environment
+    if (portBase == nullptr) {
+        return; // Avoid segfault in tests
+    }
+#endif
+
+    // Clear the mode bits for this pin (2 bits per pin)
+    portBase->MODER &= ~(0x3UL << (pin * 2));
+
+    // Set the new mode bits based on the requested mode
+    switch (mode)
+    {
+        case Mode::INPUT:
+            // Input mode is represented by 00, which is already set by the clear operation
+            break;
+        case Mode::OUTPUT:
+            portBase->MODER |= (0x1UL << (pin * 2));
+            break;
+        case Mode::ALTERNATE:
+            portBase->MODER |= (0x2UL << (pin * 2));
+            break;
+        case Mode::ANALOG:
+        default:    // Default case is analog configuration to save power
+            portBase->MODER |= (0x3UL << (pin * 2));
+            break;
+    }
 }
 
-void GPIO::setPull( Pull pull )
+void GPIO::setPull(Pull pull)
 {
-	portBase->PUPDR &= ~( 0x3 << ( pin * 2 ) );
-	switch ( pull )
-	{
-		case Pull::PULL_UP:
-			portBase->PUPDR |= ( 0x1 << ( pin * 2 ) );
-		break;
-		case Pull::PULL_DOWN:
-			portBase->PUPDR |= ( 0x2 << ( pin * 2 ) );
-		break;
-		case Pull::NO_PULL:
-		default:	// Default case should also be no pullup
-			portBase->PUPDR |= ( 0x0 << ( pin * 2 ) );
-		break;
-	}
+#ifdef UNIT_TESTING
+    // Extra safety check for nullptr in test environment
+    if (portBase == nullptr) {
+        return; // Avoid segfault in tests
+    }
+#endif
+
+    portBase->PUPDR &= ~(0x3UL << (pin * 2));
+    switch (pull)
+    {
+        case Pull::PULL_UP:
+            portBase->PUPDR |= (0x1UL << (pin * 2));
+            break;
+        case Pull::PULL_DOWN:
+            portBase->PUPDR |= (0x2UL << (pin * 2));
+            break;
+        case Pull::NO_PULL:
+        default:    // Default case should also be no pullup
+            // No need to set anything, bits are already cleared
+            break;
+    }
 }
 
-void GPIO::setSpeed( Speed speed )
+void GPIO::setSpeed(Speed speed)
 {
-	portBase->OSPEEDR &= ~( 0x3 << ( pin * 2 ) );
-	switch ( speed )
-	{
-		case Speed::MEDIUM:
-			portBase->OSPEEDR |= ( 0x1 << ( pin * 2 ) );
-		break;
-		case Speed::HIGH:
-			portBase->OSPEEDR |= ( 0x2 << ( pin * 2 ) );
-		break;
-		case Speed::VERY_HIGH:
-			portBase->OSPEEDR |= ( 0x3 << ( pin * 2 ) );
-		break;
-		case Speed::LOW:
-		default: 	// Default case is low
-			portBase->OSPEEDR |= ( 0x0 << ( pin * 2 ) );
-		break;
-	}
+#ifdef UNIT_TESTING
+    // Extra safety check for nullptr in test environment
+    if (portBase == nullptr) {
+        return; // Avoid segfault in tests
+    }
+#endif
+
+    portBase->OSPEEDR &= ~(0x3UL << (pin * 2));
+    switch (speed)
+    {
+        case Speed::MEDIUM:
+            portBase->OSPEEDR |= (0x1UL << (pin * 2));
+            break;
+        case Speed::HIGH:
+            portBase->OSPEEDR |= (0x2UL << (pin * 2));
+            break;
+        case Speed::VERY_HIGH:
+            portBase->OSPEEDR |= (0x3UL << (pin * 2));
+            break;
+        case Speed::LOW:
+        default:    // Default case is low
+            // No need to set anything, bits are already cleared
+            break;
+    }
 }
 
-void GPIO::setAlternateFunction( AlternateFunction af )
+void GPIO::setAlternateFunction(AlternateFunction af)
 {
-	if( pin < 8 )
-	{
-		portBase->AFR[ 0 ] &= ~( 0xF << ( pin * 4 ) );
-		portBase->AFR[ 0 ] |= ( static_cast<uint32_t>( af ) << ( pin * 4 ) );
-	}
-	else
-	{
-		portBase->AFR[ 1 ] &= ~( 0xF << ( ( pin - 8 ) * 4 ) );
-		portBase->AFR[ 1 ] |= ( static_cast<uint32_t>( af ) << ( ( pin - 8 ) * 4 ) );
-	}
+    if(pin < 8)
+    {
+        portBase->AFR[0] &= ~(0xFUL << (pin * 4));
+        portBase->AFR[0] |= (static_cast<uint32_t>(af) << (pin * 4));
+    }
+    else
+    {
+        portBase->AFR[1] &= ~(0xFUL << ((pin - 8) * 4));
+        portBase->AFR[1] |= (static_cast<uint32_t>(af) << ((pin - 8) * 4));
+    }
 }
 
-void GPIO::write( bool value )
+void GPIO::write(bool value)
 {
-	if( value )
-	{
-		portBase->BSRR = getPinMask( );
-	}
-	else
-	{
-		portBase->BRR = getPinMask( );
-	}
+    if(value)
+    {
+        portBase->BSRR = getPinMask();
+    }
+    else
+    {
+        portBase->BRR = getPinMask();
+    }
 }
 
-bool GPIO::read( )
+bool GPIO::read()
 {
-	return ( portBase->IDR & getPinMask( ) ) != 0;
+    return (portBase->IDR & getPinMask()) != 0;
 }
 
-uint32_t GPIO::getPinMask( ) const
+uint32_t GPIO::getPinMask() const
 {
-	return 1 << pin;
+    return 1UL << pin;
 }
 

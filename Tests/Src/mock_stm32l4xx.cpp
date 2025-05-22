@@ -27,9 +27,6 @@ void reset_all_mocks() {
 
     // Reset RCC
     memset(&mock_RCC_Peripheral, 0, sizeof(RCC_TypeDef));
-    
-    // Set default reset values if necessary
-    // Example: mock_RCC_Peripheral.CR = 0x00000063; // Example reset value
 }
 
 #else

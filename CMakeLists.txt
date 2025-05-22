@@ -4,73 +4,8 @@ project(STM32_Embedded_CPP C CXX ASM)
 # Option to enable building of tests
 option(BUILD_TESTING "Enable unit tests" ON)
 
-# Only set up ARM toolchain if we're not building tests
-if(NOT BUILD_TESTING)
-    # --- Toolchain and Target Setup for ARM Firmware ---
-    set(CMAKE_SYSTEM_NAME Generic)
-    set(CMAKE_SYSTEM_PROCESSOR ARM) # Or your specific Cortex-M processor
-
-    # Adjust TOOLCHAIN_PREFIX to your arm-none-eabi toolchain location/name if not in PATH
-    set(TOOLCHAIN_PREFIX arm-none-eabi-)
-    set(CMAKE_C_COMPILER ${TOOLCHAIN_PREFIX}gcc)
-    set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PREFIX}g++)
-    set(CMAKE_ASM_COMPILER ${TOOLCHAIN_PREFIX}gcc) # Using gcc for .s files
-    set(CMAKE_OBJCOPY ${TOOLCHAIN_PREFIX}objcopy)
-    set(CMAKE_SIZE ${TOOLCHAIN_PREFIX}size)
-endif()
-
-# Common flags for Cortex-M4 (adjust for your specific MCU, e.g., STM32L432KC)
-set(CPU_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard")
-
-set(FIRMWARE_C_FLAGS "${CPU_FLAGS} -std=gnu11 -Wall -fdata-sections -ffunction-sections")
-set(FIRMWARE_CXX_FLAGS "${CPU_FLAGS} -std=gnu++17 -Wall -fno-rtti -fno-exceptions -fno-threadsafe-statics -fdata-sections -ffunction-sections")
-set(FIRMWARE_ASM_FLAGS "${CPU_FLAGS} -x assembler-with-cpp") # For preprocessing .s files
-
-set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/STM32L432KCUX_FLASH.ld) # Ensure this path is correct
-set(FIRMWARE_LINKER_FLAGS "${CPU_FLAGS} -T ${LINKER_SCRIPT} -Wl,-Map=${PROJECT_NAME}.map,--cref -Wl,--gc-sections -specs=nano.specs -specs=nosys.specs")
-
-# --- Firmware Target ---
-# Source Files
-set(FIRMWARE_SOURCES
-    Src/main.cpp
-    Src/gpio.cpp
-    Src/rcc.cpp
-    Src/system.cpp
-    Src/usart.cpp
-    Src/syscalls.c  # System calls for printf, etc.
-    Src/sysmem.c    # System memory for malloc, etc.
-    Startup/startup_stm32l432kcux.s # Startup file
-)
-
-# Include Directories for Firmware
-set(FIRMWARE_INCLUDES
-    Inc
-    Drivers/CMSIS/Include
-    Drivers/CMSIS/Device/ST/STM32L4xx/Include # Path to stm32l4xx.h and system_stm32l4xx.h
-)
-
-add_executable(${PROJECT_NAME}.elf ${FIRMWARE_SOURCES})
-target_include_directories(${PROJECT_NAME}.elf PUBLIC ${FIRMWARE_INCLUDES})
-
-target_compile_options(${PROJECT_NAME}.elf PRIVATE
-    $<$<COMPILE_LANGUAGE:C>:${FIRMWARE_C_FLAGS}>
-    $<$<COMPILE_LANGUAGE:CXX>:${FIRMWARE_CXX_FLAGS}>
-    $<$<COMPILE_LANGUAGE:ASM>:${FIRMWARE_ASM_FLAGS}>
-)
-target_link_options(${PROJECT_NAME}.elf PRIVATE ${FIRMWARE_LINKER_FLAGS})
-
-# Create .hex and .bin files post-build
-add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${PROJECT_NAME}.elf> ${PROJECT_NAME}.hex
-    COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_NAME}.elf> ${PROJECT_NAME}.bin
-    COMMAND ${CMAKE_SIZE} $<TARGET_FILE:${PROJECT_NAME}.elf>
-    COMMENT "Generating .hex, .bin files and printing size"
-)
-
-# --- Unit Testing Setup (Host Environment) ---
-# (BUILD_TESTING is already defined at top)
-
 if(BUILD_TESTING)
+    # --- Unit Testing Setup (Host Environment) ---
     message(STATUS "Unit testing enabled.")
     
     # For Windows builds with MSVC
@@ -93,16 +28,14 @@ if(BUILD_TESTING)
         # Source files under test (compiled for host)
         Src/gpio.cpp
         # Src/rcc.cpp # Add if rcc is a dependency of gpio and needs to be linked or mocked further
-        # Add other source files from Src/ that are being tested or are dependencies
     )
 
     # Include Directories for Tests
     set(TEST_INCLUDES
         Inc                         # For project headers like gpio.h
         Tests/Inc                   # For catch.hpp, mock_stm32l4xx.h
-        # Add other necessary include paths for host compilation if any
     )
-
+    
     # Create a native executable for tests (not ARM)
     add_executable(run_tests ${TEST_SOURCES})
 
@@ -112,21 +45,95 @@ if(BUILD_TESTING)
 
     target_include_directories(run_tests PUBLIC ${TEST_INCLUDES})
 
+    # Set C++ standard to 17
+    set_property(TARGET run_tests PROPERTY CXX_STANDARD 17)
+
     # For Windows/MSVC specifically
     if(MSVC)
-        # Set output directory to match what CTest expects
+        # Set output directory and runtime library
         set_target_properties(run_tests PROPERTIES
-            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIG>")
+            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+            RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_CURRENT_BINARY_DIR}"
+            RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_CURRENT_BINARY_DIR}"
+            VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+            
+        # Set Runtime Library to Multi-threaded DLL
+        set_target_properties(run_tests PROPERTIES 
+            MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
     endif()
 
-    # Enable testing but don't automatically run tests after build
+    # Enable testing
+    include(CTest)
     enable_testing()
-    add_test(NAME HostTests COMMAND run_tests)
+    add_test(NAME HostTests 
+             COMMAND run_tests 
+             WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 
     message(STATUS "To build tests: build the 'run_tests' target.")
     message(STATUS "To run tests manually: execute 'run_tests' directly from the build directory.")
     message(STATUS "To run tests with CTest: use 'ctest' in your build directory.")
-    
 else()
-    message(STATUS "Unit testing disabled. Set BUILD_TESTING=ON to enable.")
+    # --- Firmware build setup ---
+    message(STATUS "Firmware build enabled.")
+    
+    # --- Toolchain and Target Setup for ARM Firmware ---
+    set(CMAKE_SYSTEM_NAME Generic)
+    set(CMAKE_SYSTEM_PROCESSOR ARM) # Or your specific Cortex-M processor
+
+    # Adjust TOOLCHAIN_PREFIX to your arm-none-eabi toolchain location/name if not in PATH
+    set(TOOLCHAIN_PREFIX arm-none-eabi-)
+    set(CMAKE_C_COMPILER ${TOOLCHAIN_PREFIX}gcc)
+    set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PREFIX}g++)
+    set(CMAKE_ASM_COMPILER ${TOOLCHAIN_PREFIX}gcc) # Using gcc for .s files
+    set(CMAKE_OBJCOPY ${TOOLCHAIN_PREFIX}objcopy)
+    set(CMAKE_SIZE ${TOOLCHAIN_PREFIX}size)
+
+    # Common flags for Cortex-M4 (STM32L432KC)
+    set(CPU_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard")
+
+    set(FIRMWARE_C_FLAGS "${CPU_FLAGS} -std=gnu11 -Wall -fdata-sections -ffunction-sections")
+    set(FIRMWARE_CXX_FLAGS "${CPU_FLAGS} -std=gnu++17 -Wall -fno-rtti -fno-exceptions -fno-threadsafe-statics -fdata-sections -ffunction-sections")
+    set(FIRMWARE_ASM_FLAGS "${CPU_FLAGS} -x assembler-with-cpp") # For preprocessing .s files
+
+    set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/STM32L432KCUX_FLASH.ld)
+    set(FIRMWARE_LINKER_FLAGS "${CPU_FLAGS} -T ${LINKER_SCRIPT} -Wl,-Map=${PROJECT_NAME}.map,--cref -Wl,--gc-sections -specs=nano.specs -specs=nosys.specs")
+
+    # Firmware source files
+    set(FIRMWARE_SOURCES
+        Src/main.cpp
+        Src/gpio.cpp
+        Src/rcc.cpp
+        Src/system.cpp
+        Src/usart.cpp
+        Src/syscalls.c   # System calls for printf, etc.
+        Src/sysmem.c     # System memory for malloc, etc.
+        Startup/startup_stm32l432kcux.s  # Startup file
+    )
+
+    # Firmware include directories 
+    set(FIRMWARE_INCLUDES
+        Inc
+        Drivers/CMSIS/Include
+        Drivers/CMSIS/Device/ST/STM32L4xx/Include
+    )
+
+    # Create firmware target 
+    add_executable(${PROJECT_NAME} ${FIRMWARE_SOURCES})
+    target_include_directories(${PROJECT_NAME} PRIVATE ${FIRMWARE_INCLUDES})
+
+    # Set firmware compiler flags and linker script
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        $<$<COMPILE_LANGUAGE:C>:${FIRMWARE_C_FLAGS}>
+        $<$<COMPILE_LANGUAGE:CXX>:${FIRMWARE_CXX_FLAGS}>
+        $<$<COMPILE_LANGUAGE:ASM>:${FIRMWARE_ASM_FLAGS}>
+    )
+    target_link_options(${PROJECT_NAME} PRIVATE ${FIRMWARE_LINKER_FLAGS})
+
+    # Add post-build commands to create binary and hex files
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_NAME}> ${PROJECT_NAME}.bin
+        COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${PROJECT_NAME}> ${PROJECT_NAME}.hex
+        COMMAND ${CMAKE_SIZE} $<TARGET_FILE:${PROJECT_NAME}>
+        COMMENT "Creating binary and hex files..."
+    )
 endif()
