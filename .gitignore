@@ -1,27 +1,48 @@
-## Ignore STM32 CubeIDE temporary files and build results
-# 
+# STM32 Embedded C++ Project - .gitignore
+# Keep source files, Drivers folder, and project configuration
+# Exclude build artifacts, temporary files, and IDE-specific files
 
-#Build Directories
+# ========================
+# STM32CubeIDE Build Files
+# ========================
+# Build directories
 [Dd]ebug/
 [Rr]elease/
+[Bb]uild/
 
-#Build Results
+# Compiled object files and build artifacts
 *.o
-*.eep
+*.obj
 *.elf
+*.bin
 *.hex
 *.map
-*.mk
-*.su
-*.bin
+*.list
+*.lss
+*.sym
+*.tmp
 
+# Dependencies and intermediate files
+*.d
+*.su
+*.cyclo
+
+# Makefiles (generated)
+*.mk
+makefile
+objects.list
+objects.mk
+sources.mk
+
+# ========================
+# General C/C++ Build Files
+# ========================
 # Prerequisites
 *.d
 
 # Compiled Object files
 *.slo
 *.lo
-*.obj
 
 # Precompiled Headers
 *.gch
@@ -46,12 +67,89 @@
 *.exe
 *.out
 *.app
-/Debug/
 
-#Block Metadata
-*.metadata
-
-#User Specific Files
+# ========================
+# STM32CubeIDE Workspace
+# ========================
+# Metadata and workspace files
+.metadata/
+.recommenders/
+RemoteSystemsTempFiles/
+.project
+.cproject
+.settings/
 *.launch
-/.settings
+
+# ========================
+# VS Code Files
+# ========================
+# Don't ignore .vscode/ as it contains important configuration
+# But ignore some user-specific files within it
+.vscode/launch.json
+.vscode/tasks.json
+.vscode/extensions.json
+.vscode/.cortex-debug.*
+
+# ========================
+# System and Editor Files
+# ========================
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+
+# Editor backup files
+*.bak
+*.swp
+*.swo
+*~
+
+# ========================
+# Log and Temporary Files
+# ========================
+*.log
+*.tmp
+*.temp
+
+# ========================
+# Generated Documentation
+# ========================
+html/
+latex/
+doc/
+
+# ========================
+# Project Specific Exclusions
+# ========================
+# Generated revision file
 /Core/Inc/revision.h
+
+# User-specific configuration
+*.user
+
+# ========================
+# KEEP THESE IMPORTANT FILES
+# ========================
+# Important: The following are NOT ignored and WILL be tracked:
+# - All source files (*.c, *.cpp, *.h, *.hpp)
+# - Drivers/ folder (STM32 HAL/LL drivers)
+# - App/ folder (application code)
+# - Core/ folder (main application core)
+# - Utils/ folder (utility functions)  
+# - STM32_Embedded_CPP.ioc (CubeMX configuration)
+# - Linker script (*.ld)
+# - Startup files (*.s)
+# - .vscode/settings.json and .vscode/c_cpp_properties.json
+# - README.md, LICENSE
+# - This .gitignore file
+/.vscode/c_cpp_properties.json
+/.vscode/settings.json
