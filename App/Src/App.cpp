@@ -136,10 +136,26 @@ void App_Init(void)
     btn2->enableInterrupt();
     btn3->enableInterrupt();
     
+    // Debug: Print interrupt enable status
+    printf("Button interrupts enabled:\n");
+    printf("- btn0 (PC0): %s\n", btn0->isInterruptEnabled() ? "ENABLED" : "DISABLED");
+    printf("- btn1 (PC1): %s\n", btn1->isInterruptEnabled() ? "ENABLED" : "DISABLED"); 
+    printf("- btn2 (PC2): %s\n", btn2->isInterruptEnabled() ? "ENABLED" : "DISABLED");
+    printf("- btn3 (PC3): %s\n", btn3->isInterruptEnabled() ? "ENABLED" : "DISABLED");
+    
     // Start with LED off
     led->reset();
     ledPattern = 0;
     
+    led->set( );
+    
+    // Debug: Test button pin states (should be HIGH with pull-up when not pressed)
+    printf("Initial button pin states:\n");
+    printf("- PC0: %s\n", btn0->read() == PinState::HIGH ? "HIGH (not pressed)" : "LOW (pressed?)");
+    printf("- PC1: %s\n", btn1->read() == PinState::HIGH ? "HIGH (not pressed)" : "LOW (pressed?)");
+    printf("- PC2: %s\n", btn2->read() == PinState::HIGH ? "HIGH (not pressed)" : "LOW (pressed?)");
+    printf("- PC3: %s\n", btn3->read() == PinState::HIGH ? "HIGH (not pressed)" : "LOW (pressed?)");
+
     printf("GPIO Example initialized:\n");
     printf("- LED on PB11\n");
     printf("- Button 0 (PC0): Toggle LED\n");
