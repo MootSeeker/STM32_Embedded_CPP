@@ -303,14 +303,6 @@ namespace GPIO
 
         // Pure virtual methods to be implemented by derived classes
         /**
-         * @brief Initialize the GPIO pin hardware
-         * 
-         * Pure virtual method that must be implemented by derived classes.
-         * Performs the final hardware initialization specific to the pin type.
-         */
-        virtual void init() = 0;
-        
-        /**
          * @brief Validate if current configuration is valid for this pin type
          * @return true if configuration is valid, false otherwise
          * 
@@ -367,14 +359,6 @@ namespace GPIO
         GPIOOutput(const PinConfig& config);
 
         // Override base class methods
-        /**
-         * @brief Initialize the output pin hardware
-         * 
-         * Configures the hardware and sets initial state to LOW.
-         * Called automatically during construction.
-         */
-        void init() override;
-        
         /**
          * @brief Validate configuration for output mode
          * @return true if pin is configured as OUTPUT
@@ -482,14 +466,6 @@ namespace GPIO
         GPIOInput(const PinConfig& config);
 
         // Override base class methods
-        /**
-         * @brief Initialize the input pin hardware
-         * 
-         * Configures the hardware according to the current configuration.
-         * Called automatically during construction.
-         */
-        void init() override;
-        
         /**
          * @brief Validate configuration for input mode
          * @return true if pin is configured as INPUT
@@ -607,20 +583,20 @@ namespace GPIO
          */
         GPIOEXTI(const PinConfig& config);
 
-        // Override base class methods
         /**
-         * @brief Initialize the EXTI pin hardware
+         * @brief Destructor - unregisters instance from static registry
          * 
-         * Initializes both GPIO and EXTI hardware configurations.
-         * Called automatically during construction.
+         * Ensures the GPIOEXTI instance is removed from the interrupt registry
+         * when the object is destroyed.
          */
-        void init() override;
-        
+        ~GPIOEXTI();
+
+        // Override base class methods
         /**
          * @brief Validate configuration for interrupt mode
          * @return true if pin is configured as INPUT (required for EXTI)
          */
-//        bool isValidForMode() const override;
+        bool isValidForMode() const override;
 
         // EXTI-specific methods
         /**

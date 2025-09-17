@@ -21,6 +21,13 @@
 namespace GPIO
 {
 //=============================================================================
+// GPIOEXTI Static Registry Implementation
+//=============================================================================
+
+// Static registry of GPIOEXTI instances indexed by pin number
+static GPIOEXTI* extiRegistry[16] = {nullptr};
+
+//=============================================================================
 // GPIOBase Implementation
 //=============================================================================
 
@@ -171,11 +178,12 @@ uint32_t GPIOBase::getLLPin(uint32_t pin) const {
  */
 GPIOOutput::GPIOOutput(GPIO_TypeDef* port, uint32_t pin, 
                        PinOutputType outputType, PinSpeed speed)
-    : GPIOBase(port, pin, PinMode::OUTPUT) 
+    : GPIOBase(port, pin, PinMode::OUTPUT), currentState_(PinState::LOW)
 {
     config_.outputType = outputType;
     config_.speed = speed;
-    init();
+    configureHardware();
+    reset(); // Start with low state
 }
 
 /**
@@ -187,21 +195,10 @@ GPIOOutput::GPIOOutput(GPIO_TypeDef* port, uint32_t pin,
  * @param config Pin configuration (mode will be overridden to OUTPUT)
  */
 GPIOOutput::GPIOOutput(const PinConfig& config) 
-    : GPIOBase(config) 
+    : GPIOBase(config), currentState_(PinState::LOW)
 {
     config_.mode = PinMode::OUTPUT; // Force OUTPUT mode
-    init();
-}
-
-/**
- * @brief Initialize output pin hardware and state
- * 
- * Configures GPIO hardware registers and sets initial output state to LOW.
- * This ensures a defined startup state and prevents glitches.
- */
-void GPIOOutput::init() {
     configureHardware();
-    currentState_ = PinState::LOW;
     reset(); // Start with low state
 }
 
@@ -296,7 +293,7 @@ GPIOInput::GPIOInput(GPIO_TypeDef* port, uint32_t pin, PinPull pull)
     : GPIOBase(port, pin, PinMode::INPUT) 
 {
     config_.pull = pull;
-    init();
+    configureHardware();
 }
 
 /**
@@ -311,16 +308,6 @@ GPIOInput::GPIOInput(const PinConfig& config)
     : GPIOBase(config) 
 {
     config_.mode = PinMode::INPUT; // Force INPUT mode
-    init();
-}
-
-/**
- * @brief Initialize input pin hardware
- * 
- * Configures GPIO hardware registers according to current settings.
- * No additional initialization needed beyond hardware configuration.
- */
-void GPIOInput::init() {
     configureHardware();
 }
 
@@ -385,7 +372,11 @@ GPIOEXTI::GPIOEXTI(GPIO_TypeDef* port, uint32_t pin,
       callback_(nullptr), interruptEnabled_(false) 
 {
     config_.trigger = trigger;
-    init();
+    // Register this instance in the static registry
+    if (pin < 16) {
+        extiRegistry[pin] = this;
+    }
+    configureEXTI();
 }
 
 /**
@@ -400,19 +391,34 @@ GPIOEXTI::GPIOEXTI(const PinConfig& config)
     : GPIOInput(config), trigger_(config.trigger), 
       callback_(nullptr), interruptEnabled_(false) 
 {
-    init();
+    // Register this instance in the static registry
+    if (pin_ < 16) {
+        extiRegistry[pin_] = this;
+    }
+    configureEXTI();
 }
 
 /**
- * @brief Initialize EXTI hardware configuration
+ * @brief Destructor - unregisters instance from static registry
  * 
- * Configures EXTI line, trigger condition, and port connection.
- * Enables SYSCFG clock for EXTI port multiplexing.
- * Interrupt remains disabled until enableInterrupt() is called.
+ * Ensures the GPIOEXTI instance is removed from the interrupt registry
+ * when the object is destroyed.
  */
-void GPIOEXTI::init() {
-    GPIOInput::init(); // Initialize base input functionality
-    configureEXTI();
+GPIOEXTI::~GPIOEXTI() 
+{
+    if (pin_ < 16 && extiRegistry[pin_] == this) {
+        disableInterrupt();
+        extiRegistry[pin_] = nullptr;
+    }
+}
+
+/**
+ * @brief Validate that pin is configured for input mode (required for EXTI)
+ * 
+ * @return true if pin mode is INPUT, false otherwise
+ */
+bool GPIOEXTI::isValidForMode() const {
+    return (config_.mode == PinMode::INPUT);
 }
 
 /**
@@ -436,41 +442,28 @@ void GPIOEXTI::configureEXTI() {
     EXTI_InitStruct.Trigger = static_cast<uint32_t>(trigger_);
     LL_EXTI_Init(&EXTI_InitStruct);
     
-    // Connect GPIO port to EXTI input
-    uint32_t extiLine = LL_SYSCFG_EXTI_LINE0;
-    switch (pin_) {
-        case 0: extiLine = LL_SYSCFG_EXTI_LINE0; break;
-        case 1: extiLine = LL_SYSCFG_EXTI_LINE1; break;
-        case 2: extiLine = LL_SYSCFG_EXTI_LINE2; break;
-        case 3: extiLine = LL_SYSCFG_EXTI_LINE3; break;
-        case 4: extiLine = LL_SYSCFG_EXTI_LINE4; break;
-        case 5: extiLine = LL_SYSCFG_EXTI_LINE5; break;
-        case 6: extiLine = LL_SYSCFG_EXTI_LINE6; break;
-        case 7: extiLine = LL_SYSCFG_EXTI_LINE7; break;
-        case 8: extiLine = LL_SYSCFG_EXTI_LINE8; break;
-        case 9: extiLine = LL_SYSCFG_EXTI_LINE9; break;
-        case 10: extiLine = LL_SYSCFG_EXTI_LINE10; break;
-        case 11: extiLine = LL_SYSCFG_EXTI_LINE11; break;
-        case 12: extiLine = LL_SYSCFG_EXTI_LINE12; break;
-        case 13: extiLine = LL_SYSCFG_EXTI_LINE13; break;
-        case 14: extiLine = LL_SYSCFG_EXTI_LINE14; break;
-        case 15: extiLine = LL_SYSCFG_EXTI_LINE15; break;
-        default: extiLine = LL_SYSCFG_EXTI_LINE0; break;
+    // Connect GPIO port to EXTI input - simplified logic
+    uint32_t syscfgExtiLine = pin_; // Direct mapping: pin 0 -> LINE0, pin 1 -> LINE1, etc.
+    uint32_t syscfgPort;
+    
+    // Map GPIO port to SYSCFG port constant
+    if (port_ == GPIOA) {
+        syscfgPort = LL_SYSCFG_EXTI_PORTA;
+    } else if (port_ == GPIOB) {
+        syscfgPort = LL_SYSCFG_EXTI_PORTB;
+    } else if (port_ == GPIOC) {
+        syscfgPort = LL_SYSCFG_EXTI_PORTC;
+    } else if (port_ == GPIOD) {
+        syscfgPort = LL_SYSCFG_EXTI_PORTD;
+    } else if (port_ == GPIOE) {
+        syscfgPort = LL_SYSCFG_EXTI_PORTE;
+    } else if (port_ == GPIOH) {
+        syscfgPort = LL_SYSCFG_EXTI_PORTH;
+    } else {
+        return; // Unsupported port
     }
     
-    if (port_ == GPIOA) {
-        LL_SYSCFG_SetEXTISource(extiLine, LL_SYSCFG_EXTI_PORTA);
-    } else if (port_ == GPIOB) {
-        LL_SYSCFG_SetEXTISource(extiLine, LL_SYSCFG_EXTI_PORTB);
-    } else if (port_ == GPIOC) {
-        LL_SYSCFG_SetEXTISource(extiLine, LL_SYSCFG_EXTI_PORTC);
-    } else if (port_ == GPIOD) {
-        LL_SYSCFG_SetEXTISource(extiLine, LL_SYSCFG_EXTI_PORTD);
-    } else if (port_ == GPIOE) {
-        LL_SYSCFG_SetEXTISource(extiLine, LL_SYSCFG_EXTI_PORTE);
-    } else if (port_ == GPIOH) {
-        LL_SYSCFG_SetEXTISource(extiLine, LL_SYSCFG_EXTI_PORTH);
-    }
+    LL_SYSCFG_SetEXTISource(syscfgExtiLine, syscfgPort);
 }
 
 /**
@@ -550,13 +543,17 @@ void GPIOEXTI::setCallback(std::function<void()> callback) {
  * @note Call this from your EXTIx_IRQHandler functions
  */
 void GPIOEXTI::handleInterrupt(uint32_t pin) {
+    if (pin >= 16) return; // Invalid pin number
+    
     uint32_t extiLine = (1U << pin);
     if (LL_EXTI_IsActiveFlag_0_31(extiLine)) {
         LL_EXTI_ClearFlag_0_31(extiLine);
         
-        // Find the GPIOEXTI instance for this pin and call its callback
-        // Note: This requires a static registry of GPIOEXTI instances
-        // For now, this is a basic implementation
+        // Find the registered GPIOEXTI instance for this pin and call its callback
+        GPIOEXTI* instance = extiRegistry[pin];
+        if (instance && instance->callback_) {
+            instance->callback_();
+        }
     }
 }
 
