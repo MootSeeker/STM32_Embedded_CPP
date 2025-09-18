@@ -94,7 +94,7 @@ int _write(int file, char *ptr, int len)
 {
     if (file == STDOUT_FILENO || file == STDERR_FILENO)
     {
-    	// TODO: Add Uart write
+    	// TODO: Add UART write
         return len;
     }
     errno = EBADF;
