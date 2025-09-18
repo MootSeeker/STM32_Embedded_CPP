@@ -34,9 +34,6 @@
 #include <errno.h>
 #include <sys/unistd.h>
 
-/**
- * @brief External handle for UART interface
- */
 
 
 /* Variables */
