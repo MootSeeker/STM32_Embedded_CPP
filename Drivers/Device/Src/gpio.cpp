@@ -442,11 +442,11 @@ void GPIOEXTI::configureEXTI() {
     EXTI_InitStruct.Trigger = static_cast<uint32_t>(trigger_);
     LL_EXTI_Init(&EXTI_InitStruct);
     
-    // Connect GPIO port to EXTI input - simplified logic
-    uint32_t syscfgExtiLine = pin_; // Direct mapping: pin 0 -> LINE0, pin 1 -> LINE1, etc.
-    uint32_t syscfgPort;
+    // Connect GPIO port to EXTI input using proper SYSCFG mapping
+    // Each pin maps directly to its EXTI line: Pin 0 -> EXTI_LINE0, Pin 1 -> EXTI_LINE1, etc.
     
     // Map GPIO port to SYSCFG port constant
+    uint32_t syscfgPort;
     if (port_ == GPIOA) {
         syscfgPort = LL_SYSCFG_EXTI_PORTA;
     } else if (port_ == GPIOB) {
@@ -463,6 +463,8 @@ void GPIOEXTI::configureEXTI() {
         return; // Unsupported port
     }
     
+    // Set EXTI source based on pin number (direct mapping: pin -> EXTI line)
+    uint32_t syscfgExtiLine = pin_; // For LL_SYSCFG_SetEXTISource, the first parameter is the line number (0-15)
     LL_SYSCFG_SetEXTISource(syscfgExtiLine, syscfgPort);
 }
 
@@ -489,6 +491,8 @@ void GPIOEXTI::enableInterrupt() {
         else if (pin_ >= 10 && pin_ <= 15) irqn = EXTI15_10_IRQn;
         else return; // Invalid pin number
         
+        // Set NVIC priority and enable interrupt
+        NVIC_SetPriority(irqn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 10, 0));
         NVIC_EnableIRQ(irqn);
         interruptEnabled_ = true;
     }

@@ -30,6 +30,11 @@
 #include <sys/time.h>
 #include <sys/times.h>
 
+#include "main.h"
+#include <errno.h>
+#include <sys/unistd.h>
+
+
 
 /* Variables */
 extern int __io_putchar(int ch) __attribute__((weak));
@@ -77,16 +82,23 @@ __attribute__((weak)) int _read(int file, char *ptr, int len)
   return len;
 }
 
-__attribute__((weak)) int _write(int file, char *ptr, int len)
+/**
+ * @brief Write function wrapper
+ * @details Transfers pointer and data size to the UART Transmit function
+ * @param file - File descriptor (e.g., STDOUT_FILENO for stdout, STDERR_FILENO for stderr)
+ * @param *ptr - Pointer to data
+ * @param len - Length of data
+ * @return Number of bytes written on success, -1 on error
+ */
+int _write(int file, char *ptr, int len)
 {
-  (void)file;
-  int DataIdx;
-
-  for (DataIdx = 0; DataIdx < len; DataIdx++)
-  {
-    __io_putchar(*ptr++);
-  }
-  return len;
+    if (file == STDOUT_FILENO || file == STDERR_FILENO)
+    {
+    	// TODO: Add UART write
+        return len;
+    }
+    errno = EBADF;
+    return -1;
 }
 
 int _close(int file)
