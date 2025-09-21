@@ -28,6 +28,13 @@
 extern "C" {
 #endif
 
+// Forward declaration for C++ USART interrupt handler
+void USART_HandleLpuart1Interrupt(void);
+
+#ifdef __cplusplus
+}
+#endif
+
 // Forward declaration for C++ GPIO interrupt handler
 extern void GPIO_EXTI_HandleInterrupt(uint32_t pin);
 
@@ -312,7 +319,7 @@ void LPUART1_IRQHandler(void)
 
   /* USER CODE END LPUART1_IRQn 0 */
   /* USER CODE BEGIN LPUART1_IRQn 1 */
-
+  USART_HandleLpuart1Interrupt();
   /* USER CODE END LPUART1_IRQn 1 */
 }
 

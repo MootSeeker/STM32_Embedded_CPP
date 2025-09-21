@@ -24,6 +24,9 @@
 
 #include "CppWrapper.h"
 
+// For printf debug interface
+extern void initialise_monitor_handles(void);
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -94,6 +97,9 @@ int main(void)
 
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
+
+  // Initialize debug interface for printf
+  initialise_monitor_handles();
 
   EventLoopC( );
 

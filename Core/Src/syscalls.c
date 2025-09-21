@@ -34,6 +34,12 @@
 #include <errno.h>
 #include <sys/unistd.h>
 
+// Forward declarations for USART C interface
+extern void* USART_CreateDebugInstance(void);
+extern void USART_Initialize(void* instance, void* config);
+extern void* USART_GetDefaultLpuartConfig(void);
+extern void USART_SendChar(void* instance, char c);
+
 
 
 /* Variables */
@@ -44,10 +50,18 @@ extern int __io_getchar(void) __attribute__((weak));
 char *__env[1] = { 0 };
 char **environ = __env;
 
+// Global debug USART instance
+static void* debug_usart_instance = NULL;
 
 /* Functions */
 void initialise_monitor_handles()
 {
+    // Initialize LPUART1 for debug output
+    debug_usart_instance = USART_CreateDebugInstance();
+    if (debug_usart_instance != NULL) {
+        void* config = USART_GetDefaultLpuartConfig();
+        USART_Initialize(debug_usart_instance, config);
+    }
 }
 
 int _getpid(void)
@@ -94,8 +108,14 @@ int _write(int file, char *ptr, int len)
 {
     if (file == STDOUT_FILENO || file == STDERR_FILENO)
     {
-    	// TODO: Add UART write
-        return len;
+        if (debug_usart_instance != NULL) {
+            // Send data via LPUART1
+            for (int i = 0; i < len; i++) {
+                USART_SendChar(debug_usart_instance, ptr[i]);
+            }
+            return len;
+        }
+        return len; // Return success even if USART not initialized
     }
     errno = EBADF;
     return -1;

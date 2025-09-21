@@ -113,6 +113,7 @@ void btn3InterruptCallback()
 
 void App_Init(void)
 {
+    printf("=== STM32L433 LPUART1 Debug Interface Active ===\n");
     printf("App_Init: Initializing GPIO example...\n");
     
     // Create LED on PB11 (push-pull output, low speed)
@@ -198,6 +199,9 @@ void App_Run(void)
         }
         
         // Small delay to prevent busy waiting
-        for (volatile int i = 0; i < 100; i++);
+        for ( int i = 0; i < 100; i++)
+        {
+        	__NOP( );
+        }
     }
 }
