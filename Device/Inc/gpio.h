@@ -1,9 +1,6 @@
 /**
  * @file gpio.h
  * @brief Intelligent GPIO class library for STM32L4xx using LL drivers
- * @author kevin
- * @date Sep 16, 2025
- * @version 1.0
  * 
  * This file provides a comprehensive C++ wrapper for STM32L4xx GPIO operations
  * using the Low-Level (LL) driver library. It implements an object-oriented
