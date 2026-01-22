@@ -72,6 +72,7 @@ void MyFunction(int x) {  // Don't do this
 *   **Local Variables**: `lowerCamelCase` (e.g., `ledCounter`).
 *   **Constants/Macros**: `ALL_CAPS` (e.g., `MAX_BUFFER_SIZE`).
 *   **Member Variables**: No trailing underscores (unlike Google style). Just usage context is usually enough.
+*   **A Note on Style**: `snake_case` is also acceptable for functions and variables, as long as the chosen style is used consistently within a given module. Readability is the priority.
 
 ## Adding New Examples
 
