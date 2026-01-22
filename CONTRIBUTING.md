@@ -60,6 +60,7 @@ void MyFunction(int x) {  // Don't do this
 *   **HAL Wrappers**:
     *   Do not expose raw `HAL_` types (like `UART_HandleTypeDef`) in the public application headers (`App.h`).
     *   Wrap low-level HAL calls inside the library classes (`Library/Src`).
+*   **Justify Necessary Complexity**: If a complex implementation (e.g., dynamic allocation in a critical path) is unavoidable, clearly explain the reasoning in your Pull Request or commit message. This helps reviewers fact-check the logic and understand the trade-offs.
 
 ### 3. Naming Conventions
 *   **Classes**: `UpperCamelCase` (e.g., `DigitalOut`, `UpsilonTimer`).
