@@ -2,8 +2,6 @@
  * @file gpio.cpp
  * @brief Implementation of intelligent GPIO class library for STM32L4xx using LL drivers
  * 
- * @author kevin
- * @date Sep 16, 2025
  * @version 1.0
  * 
  * This file implements the GPIO class hierarchy providing object-oriented access

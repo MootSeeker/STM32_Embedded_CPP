@@ -5,85 +5,38 @@
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) 
 [![forthebadge](https://forthebadge.com/images/badges/for-you.svg)](https://forthebadge.com)
 
-## Overview 🌐
+## Overview
 
 This repository demonstrates the application of C++ in embedded systems, specifically using STM32 microcontrollers. The goal is to provide a learning resource for developers transitioning from general C++ programming to embedded development. The project includes core components, hardware drivers, and practical examples, all aimed at showcasing the capabilities of STM32 microcontrollers and the efficiency of C++ in embedded programming.
 
 ## Recent changes (Sept 17, 2025)
-
-This project received a focused refactor of the GPIO/EXTI subsystem and an example application demonstrating interrupt-driven button handling.
-
-- Implemented a static registry for EXTI-capable GPIO objects so external interrupts dispatch to the correct C++ object and callback.
-- Moved the EXTI IRQ handlers into the CubeMX-friendly `Core/Src/stm32l4xx_it.c` (C ISRs) which forward to a C-wrapper that calls `GPIO::GPIOEXTI::handleInterrupt(pin)`.
-- Removed the separate `gpio_isr_example.cpp` file and added an App example (`App/Src/App.cpp`) that uses LED on PB11 and buttons on PC0..PC3.
-- Refactored `GPIOEXTI::configureEXTI()` to simplify EXTI source selection and SYSCFG mapping.
-- Switched to RAII-style initialization: constructors perform hardware configuration and `GPIOEXTI` objects register/unregister themselves in the static registry; a destructor cleans up on deletion.
-- Improved const-correctness and API cleanup (removed virtual `init()` from the base class; updated headers).
-
-If you use the GPIO/EXTI features, ensure the LL driver headers are available and your CubeMX configuration enables the EXTI/SYSCFG peripheral clocks.
-
-## Example: what was added in `App/Src/App.cpp`
-
-- LED on PB11 (push-pull output).
-- Buttons on PC0..PC3 configured with internal pull-ups and falling-edge triggers.
-- Button behaviors:
-    - PC0: toggle LED
-    - PC1: LED ON
-    - PC2: LED OFF
-    - PC3: cycle LED patterns (OFF → ON → slow blink → fast blink)
-
-The application registers lightweight callbacks for each button and defers heavier work to the main loop.
-
-## ISR wiring and notes
-
-- The C IRQ handlers (in `Core/Src/stm32l4xx_it.c`) now check EXTI pending flags and call a small C bridge function `GPIO_EXTI_HandleInterrupt(pin)` which forwards into C++.
-- For grouped IRQs (EXTI5..9 and EXTI10..15) the ISR scans all pending lines and calls the bridge for each active pin.
-- Callback functions execute in interrupt context — keep them short and non-blocking. Use flags/atomic variables or an RTOS queue to pass work to the main task.
-
-## Quick usage snippet
-
-```cpp
-// Create LED on PB11 and buttons on PC0..PC3
-auto led = new GPIO::GPIOOutput(GPIOB, 11, GPIO::PinOutputType::PUSH_PULL);
-auto b0 = new GPIO::GPIOEXTI(GPIOC, 0, GPIO::EXTITrigger::FALLING, GPIO::PinPull::PULL_UP);
-// set callbacks and enable
-b0->setCallback([](){ /* quick action */ });
-b0->enableInterrupt();
-```
+This project received a focused refactor of the GPIO/EXTI subsystem and an example application demonstrating interrupt-driven button handling. The project is now structured as a learning space (`Library` vs `Examples`).
 
 ## Build & run notes
-
-- Open in STM32CubeIDE and build as usual.
+- Open in STM32CubeIDE or VS Code and build as usual.
 - Ensure `stm32l4xx_ll_*` headers are available and CubeMX config enables the required peripherals (GPIO, SYSCFG, NVIC lines for EXTI).
 
-## Recommendations
-
-- Verify NVIC group handling on your STM32 part: EXTI lines share IRQs — disabling a shared NVIC line affects all pins on the same group.
-- Use the App example as a starting point and adapt pin numbers / ports to your board.
-
-## Repository Structure 🗂️
-
+## Repository Structure 
 - **Core/**: Core components and configurations.
 - **App/**: Example applications demonstrating usage.
 - **Inc/**: Header files for classes and interfaces.
 - **Src/**: Source files for implementations.
 - **Drivers/**: Hardware drivers and related files.
 
-## Features ✨
-
+## Features 
 - **GPIO Class**: Comprehensive implementation for STM32 microcontrollers.
 - **Modern C++**: Utilizes C++11/14/17 features.
 - **HAL Integration**: Seamless hardware control via STM32 HAL.
 
-## Getting Started 🚀
+## Getting Started 
 
-### Prerequisites 📋
+### Prerequisites 
 
 - STM32CubeIDE or a compatible IDE.
 - Basic C++ and embedded systems knowledge.
 - STM32 development board (e.g., STM32F4 Discovery, STM32 Nucleo).
 
-### Installation 💻
+### Installation 
 
 1. Clone the repository:
     ```sh
@@ -121,15 +74,15 @@ b0->enableInterrupt();
 ![Top Langs](https://img.shields.io/github/languages/top/MootSeeker/STM32_Embedded_CPP)
 ![Languages](https://img.shields.io/github/languages/count/MootSeeker/STM32_Embedded_CPP)
 
-## Contributing 🤝
+## Contributing 
 
 Contributions are welcome! Please fork the repository, create a feature branch, commit your changes, and open a pull request.
 
-## License 📜
+## License 
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Contact 📧
+## Contact 
 
 For questions or feedback, please open an issue on the repository or contact [MootSeeker](https://github.com/MootSeeker).
 

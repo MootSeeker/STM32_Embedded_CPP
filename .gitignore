@@ -37,8 +37,6 @@ sources.mk
 # ========================
 # General C/C++ Build Files
 # ========================
-# Prerequisites
-*.d
 
 # Compiled Object files
 *.slo
@@ -73,8 +71,6 @@ sources.mk
 # ========================
 # Metadata and workspace files
 .metadata/
-.recommenders/
-RemoteSystemsTempFiles/
 .project
 .cproject
 .settings/
@@ -104,15 +100,6 @@ $RECYCLE.BIN/
 .AppleDouble
 .LSOverride
 
-# Linux
-*~
-
-# Editor backup files
-*.bak
-*.swp
-*.swo
-*~
-
 # ========================
 # Log and Temporary Files
 # ========================
@@ -127,29 +114,8 @@ html/
 latex/
 doc/
 
-# ========================
-# Project Specific Exclusions
-# ========================
-# Generated revision file
-/Core/Inc/revision.h
-
 # User-specific configuration
 *.user
-
-# ========================
-# KEEP THESE IMPORTANT FILES
-# ========================
-# Important: The following are NOT ignored and WILL be tracked:
-# - All source files (*.c, *.cpp, *.h, *.hpp)
-# - Drivers/ folder (STM32 HAL/LL drivers)
-# - App/ folder (application code)
-# - Core/ folder (main application core)
-# - Utils/ folder (utility functions)  
-# - STM32_Embedded_CPP.ioc (CubeMX configuration)
-# - Linker script (*.ld)
-# - Startup files (*.s)
-# - .vscode/settings.json and .vscode/c_cpp_properties.json
-# - README.md, LICENSE
-# - This .gitignore file
+.github/copilot-instructions.md
 /.vscode/c_cpp_properties.json
 /.vscode/settings.json
