@@ -5,10 +5,13 @@ Thank you for your interest in contributing to this learning space! We welcome c
 Since this is an educational repository, code readability, documentation, and clean structure are just as important as functionality.
 
 ## Getting Started
-1.  **Hardware**: The primary target is the **STM32L4xx**. If you are adding examples for other boards, please document the pinout changes clearly.
+1.  **Hardware**: The primary target is the **STM32L433**. However, the project now supports a **multi-target architecture**.
+    *   Targets are located in `Targets/` (e.g. `Targets/Nucleo_L433`).
+    *   If you are adding examples for other boards, please create a new target folder first if it doesn't exist.
 2.  **IDE / Toolchain**:
-    *   We use **VS Code** or **STM32CubeIDE**.
-    *   Ensure you have the ARM GCC toolchain installed.
+    *   We primarily use **STM32CubeIDE**.
+    *   The project structure isolates generic C++ code (`App/`, `Device/`) from board-specific generated code (`Targets/`).
+    *   Ensure you import the specific target project (e.g. `Targets/Nucleo_L433`) and NOT the root folder.
     *   Formatting is handled via `.clang-format` (if available) or manual adherence to the style guide.
 
 ## Workflow
@@ -59,7 +62,8 @@ void MyFunction(int x) {  // Don't do this
     *   Prefer stack allocation or static buffers where possible.
 *   **HAL Wrappers**:
     *   Do not expose raw `HAL_` types (like `UART_HandleTypeDef`) in the public application headers (`App.h`).
-    *   Wrap low-level HAL calls inside the library classes (`Library/Src`).
+    *   Wrap low-level HAL calls inside the library classes (`Device/Src` or `Library/Src`).
+    *   Use the `mcu_adapter.h` abstraction layer instead of including specific `stm32l4xx_ll_*.h` headers directly in your drivers.
 *   **Justify Necessary Complexity**: If a complex implementation (e.g., dynamic allocation in a critical path) is unavoidable, clearly explain the reasoning in your Pull Request or commit message. This helps reviewers fact-check the logic and understand the trade-offs.
 
 ### 3. Naming Conventions
