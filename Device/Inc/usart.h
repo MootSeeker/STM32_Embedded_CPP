@@ -8,7 +8,7 @@
 #ifndef INC_USART_H_
 #define INC_USART_H_
 
-#include "main.h"
+#include "mcu_adapter.h"
 #include <cstring>
 #include <cstdarg>
 #include <cstdio>

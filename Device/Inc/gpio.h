@@ -13,9 +13,7 @@
 #ifndef DEVICE_INC_GPIO_H_
 #define DEVICE_INC_GPIO_H_
 
-#include "stm32l4xx_ll_gpio.h"
-#include "stm32l4xx_ll_bus.h"
-#include "stm32l4xx_ll_exti.h"
+#include "mcu_adapter.h"
 
 #include <vector>
 #include <cstdint>
