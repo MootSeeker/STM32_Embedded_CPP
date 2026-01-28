@@ -56,6 +56,12 @@ This project uses a **Multi-Target Architecture**:
 3.  Click **Directory...** and navigate to `STM32_Embedded_CPP/Targets/Nucleo_L433`.
 4.  Click **Finish**.
 
+![Import Project](assets/import_project.png)
+
+The project structure should look like this:
+
+![Opened Project](assets/opened_project_1.png)
+
 ### 3. Setting up linked resources
 
 Since the source code (`App`, `Device`) lives outside the project folder, you need to ensure the linked resources are set up correctly if they appear broken.
@@ -63,12 +69,28 @@ The project uses the variable `${PROJECT_LOC}` to refer to files relative to the
 
 If folders `App`, `Device`, `Utils` are missing in the Project Explorer:
 1.  Right-click the Project -> **New** -> **Folder**.
+
+    ![Add New Folder](assets/add_new_folder.png)
+
 2.  Click **Advanced >>** -> Check **Link to alternate location (Linked Folder)**.
+
+    ![Add Linked Folder](assets/add_linked_folders.png)
+
 3.  Enter the location using the project variable:
     *   `App` -> `${PROJECT_LOC}/../../App`
     *   `Device` -> `${PROJECT_LOC}/../../Device`
     *   `Utils` -> `${PROJECT_LOC}/../../Utils`
     *   `Adapters` -> `${PROJECT_LOC}/../../Adapters`
+
+4.  Add the Include paths to the project properties:
+    *   For C Paths:
+
+        ![Add Include Paths C](assets/add_include_paths_c.png)
+
+    *   For C++ Paths:
+
+        ![Add Include Paths CPP](assets/add_include_paths_cpp.png)
+---
 
 ### 4. Build & Run
 1.  Connect your Nucleo Board.
@@ -91,9 +113,10 @@ Work in `Device/`.
 1.  Create a new folder in `Targets/` (e.g., `Nucleo_F446`).
 2.  Generate a new project using STM32CubeMX (or create a new STM32 Project in IDE) inside that folder.
 3.  **Recommended**: Select "LL" (Low Layer) drivers for peripherals managed by `Device/` classes (like GPIO, UART) to maintain efficiency. However, you can mixed LL and HAL drivers if needed (e.g., using HAL for USB/Ethernet).
-4.  Add the existing C++ folders (`App`, `Device`, `Adapters`) as linked folders (see generic link path above).
-5.  Add `${PROJECT_LOC}/../../Adapters/Inc`, `${PROJECT_LOC}/../../App/Inc`, etc. to the **Include Paths** in Project Properties.
-6.  Update `Adapters/Inc/mcu_adapter.h` to support the new MCU family (add `#ifdef STM32F4...`).
+4.  **Setup Linked Resources & Includes**: Repeat the steps from **Getting Started -> 3. Setting up linked resources** to:
+    *   Add the linked folders (`App`, `Device`, `Utils`, `Adapters`).
+    *   Add the C and C++ Include Paths.
+5.  Update `Adapters/Inc/mcu_adapter.h` to support the new MCU family (add `#ifdef STM32F4...`).
 
 ## Contributing
 
