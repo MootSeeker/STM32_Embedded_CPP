@@ -30,4 +30,31 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>Adapters</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Adapters</locationURI>
+		</link>
+		<link>
+			<name>App</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/App</locationURI>
+		</link>
+		<link>
+			<name>Device</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Device</locationURI>
+		</link>
+		<link>
+			<name>Library</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Library</locationURI>
+		</link>
+		<link>
+			<name>Utils</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Utils</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

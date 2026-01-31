@@ -71,8 +71,6 @@ sources.mk
 # ========================
 # Metadata and workspace files
 .metadata/
-.project
-.cproject
 .settings/
 *.launch
 
