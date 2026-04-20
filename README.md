@@ -5,6 +5,14 @@
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) 
 [![forthebadge](https://forthebadge.com/images/badges/for-you.svg)](https://forthebadge.com)
 
+[![Stars](https://img.shields.io/github/stars/MootSeeker/STM32_Embedded_CPP?style=flat-square&logo=github)](https://github.com/MootSeeker/STM32_Embedded_CPP/stargazers)
+[![Forks](https://img.shields.io/github/forks/MootSeeker/STM32_Embedded_CPP?style=flat-square&logo=github)](https://github.com/MootSeeker/STM32_Embedded_CPP/network/members)
+[![Issues](https://img.shields.io/github/issues/MootSeeker/STM32_Embedded_CPP?style=flat-square&logo=github)](https://github.com/MootSeeker/STM32_Embedded_CPP/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/MootSeeker/STM32_Embedded_CPP/main?style=flat-square&logo=git)](https://github.com/MootSeeker/STM32_Embedded_CPP/commits/main)
+[![License](https://img.shields.io/github/license/MootSeeker/STM32_Embedded_CPP?style=flat-square)](LICENSE)
+[![Top Language](https://img.shields.io/github/languages/top/MootSeeker/STM32_Embedded_CPP?style=flat-square)](https://github.com/MootSeeker/STM32_Embedded_CPP)
+[![Commit Activity](https://img.shields.io/github/commit-activity/m/MootSeeker/STM32_Embedded_CPP?style=flat-square)](https://github.com/MootSeeker/STM32_Embedded_CPP/commits/main)
+
 ## Overview
 
 This repository demonstrates a clean, modern C++ architecture for embedded systems using STM32 microcontrollers. 
@@ -38,8 +46,15 @@ This project uses a **Multi-Target Architecture**:
 ├── Utils/              # 🛠 Helpers & C-to-C++ Bridge
 └── Targets/            # 🎯 Board Specific Projects
     ├── Nucleo_L433/    # Complete CubeIDE Project for L433
-    └── Nucleo_.../     # Future Targets
+    └── Nucleo_F446RE/  # STM32F446RE (planned)
 ```
+
+### Supported Targets
+
+| Target | MCU | Status |
+|--------|-----|--------|
+| [`Nucleo_L433`](Targets/Nucleo_L433/) | STM32L433RBTx | ✅ Active |
+| [`Nucleo_F446RE`](Targets/Nucleo_F446RE/) | STM32F446RETx | 🚧 Planned |
 
 ## Getting Started
 
@@ -118,9 +133,26 @@ Work in `Device/`.
     *   Add the C and C++ Include Paths.
 5.  Update `Adapters/Inc/mcu_adapter.h` to support the new MCU family (add `#ifdef STM32F4...`).
 
+## Available Drivers & Examples
+
+### Drivers
+
+| Driver | Header | Description |
+|--------|--------|-------------|
+| GPIO | [`Device/Inc/gpio.h`](Device/Inc/gpio.h) | Digital output, input and EXTI interrupt callbacks |
+| USART | [`Device/Inc/usart.h`](Device/Inc/usart.h) | Type-safe TX driver with interrupt-driven circular buffer |
+
+### Examples
+
+| # | Example | Description |
+|---|---------|-------------|
+| 01 | [GPIO_Blinky](Examples/01_GPIO_Blinky/README.md) | LED toggle using `GPIOOutput` |
+| 02 | [USART_HelloWorld](Examples/02_USART_HelloWorld/README.md) | LPUART1 TX with error handling and formatted output |
+
 ## Contributing
 
-Contributions are welcome! If you port this to a new board, please submit a PR with the new folder in `Targets/`.
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for coding standards and guidelines.
+If you port this to a new board, submit a PR with the new folder in `Targets/`.
 
 ## License
 
